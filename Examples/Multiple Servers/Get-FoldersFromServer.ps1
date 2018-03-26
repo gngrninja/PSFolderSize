@@ -10,7 +10,8 @@ $basePath = 'c$'
 $servers = Get-Content -Path "$PSScriptRoot\servers.txt"
 
 #Import the module - be sure to change this path to where the psd1 file is on your machine
-Import-Module -Name C:\users\ninja\onedrive\Documents\Development\PowerShell\blog\psFolderSize\PSFolderSize\PSFolderSize.psd1
+#Not needed if you already have the module imported
+Import-Module -Name C:\path\to\PSFolderSize.psd1
 
 foreach ($server in $servers) {
     
