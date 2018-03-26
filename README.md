@@ -28,4 +28,4 @@ Check out the Examples folder for example(s) on how to use the module.
 
 There's only one for now, with more to come!
 
-Leave an issue here if you have some feedback, issues, or questions.
+*Leave an issue here if you have some feedback, issues, or questions.*
