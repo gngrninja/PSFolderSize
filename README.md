@@ -4,7 +4,7 @@ This module enables you get gather folder size information, and output the resul
 Article for this repository is here:
 https://www.gngrninja.com/script-ninja/2016/5/24/powershell-calculating-folder-sizes
 
-## Getting started
+## Getting Started
 You can import the module by using: 
 
 ```powershell
