@@ -19,7 +19,7 @@ function Get-FolderSize {
     .PARAMETER BasePath
 
     This parameter allows you to specify the base path you'd like to get the child folders of.
-    It defaults to C:\.
+    It defaults to where the module was run from via (Get-Location).
 
     .PARAMETER FolderName
 
