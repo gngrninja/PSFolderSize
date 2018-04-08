@@ -134,26 +134,37 @@ function Get-FolderSize {
     Get-FolderSize.ps1 -OmitFolders 'C:\Temp','C:\Windows'
 
     #>
-    [cmdletbinding()]
+    [cmdletbinding(
+        DefaultParameterSetName = 'default'
+    )]
     param(
         [Parameter(
             Mandatory = $false,
-            Position = 0
+            Position = 0,
+            ParameterSetName = 'default'
         )]
         [Alias('Path')]
         [String[]]
         $BasePath = (Get-Location),        
 
-        [Parameter(Mandatory = $false)]
+        [Parameter(
+            Mandatory = $false,
+            ParameterSetName = 'default'
+            
+        )]
         [Alias('User')]
         [String[]]
         $FolderName = 'all',
 
-        [Parameter()]
+        [Parameter(
+            ParameterSetName = 'default'
+        )]
         [String[]]
         $OmitFolders,
 
-        [Parameter()]
+        [Parameter(
+            ParameterSetName = 'default'
+        )]
         [Switch]
         $AddTotal,
 
