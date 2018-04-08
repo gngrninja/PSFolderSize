@@ -182,7 +182,7 @@ function Get-FolderSize {
         $OutputPath = (Get-Location),
 
         [Parameter(
-            ParameterSetName = 'outputOwnFile'
+            ParameterSetName = 'default'
         )]
         [String]
         $OutputFile = [string]::Empty
