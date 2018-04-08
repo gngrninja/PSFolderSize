@@ -169,12 +169,18 @@ function Get-FolderSize {
         $AddTotal,
 
         [Parameter(
+            ParameterSetName = 'default'
+        )]
+        [Parameter(
             ParameterSetName = 'outputWithType'
         )]
         [ValidateSet('csv','xml','json')]
         [String]        
         $Output,
 
+        [Parameter(
+            ParameterSetName = 'default'
+        )]
         [Parameter(
             ParameterSetName = 'outputWithType'
         )]
