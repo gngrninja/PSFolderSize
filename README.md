@@ -14,8 +14,13 @@ Import-Module .\path\to\PSFolderSize.psd1
 ```powershell
 Import-Module .\path\to\FolderModuleFilesAreIn
 ```
+-or-
 
-I will be adding it to the PowerShell Gallery after some more testing.
+Via the PowerShell Gallery:
+
+```powershell
+Install-Module PSFolderSize
+```
 
 Once it is imported, use...
 
