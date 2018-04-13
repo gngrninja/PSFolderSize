@@ -56,7 +56,7 @@ function Get-FolderSize {
 
     .EXAMPLE 
 
-    Get-FolderSize.ps1
+    Get-FolderSize | Format-Table -AutoSize
     -------------------------------------
 
     FolderName                Size(Bytes) Size(MB)     Size(GB)
@@ -70,7 +70,7 @@ function Get-FolderSize {
 
     .EXAMPLE 
 
-    Get-FolderSize.ps1 -BasePath 'C:\Program Files'
+    Get-FolderSize -BasePath 'C:\Program Files'
     -------------------------------------
 
     FolderName                                   Size(Bytes) Size(MB)    Size(GB)
@@ -83,7 +83,7 @@ function Get-FolderSize {
 
     .EXAMPLE 
 
-    Get-FolderSize.ps1 -BasePath 'C:\Program Files' -FolderName IIS
+    Get-FolderSize -BasePath 'C:\Program Files' -FolderName IIS
     -------------------------------------
 
     FolderName Size(Bytes) Size(MB) Size(GB)
@@ -92,8 +92,8 @@ function Get-FolderSize {
 
     .EXAMPLE
 
-    $getFolderSize = Get-FolderSize.ps1 
-    $getFolderSize 
+    $getFolderSize = Get-FolderSize 
+    $getFolderSize | Format-Table -AutoSize
     -------------------------------------
 
     FolderName Size(GB) Size(MB)
@@ -103,7 +103,7 @@ function Get-FolderSize {
 
     .EXAMPLE
 
-    $getFolderSize = Get-FolderSize.ps1 -Output csv -OutputPath ~\Desktop
+    $getFolderSize = Get-FolderSize -Output csv -OutputPath ~\Desktop
     $getFolderSize 
     -------------------------------------
 
@@ -117,7 +117,7 @@ function Get-FolderSize {
     .EXAMPLE
 
     Sort by size descending 
-    $getFolderSize = Get-FolderSize.ps1 | Sort-Object 'Size(Bytes)' -Descending
+    $getFolderSize = Get-FolderSize | Sort-Object 'Size(Bytes)' -Descending
     $getFolderSize 
     -------------------------------------
 
@@ -240,6 +240,7 @@ function Get-FolderSize {
             'Size(Bytes)' = $folderSize.Sum
             'Size(MB)'    = $folderSizeInMB
             'Size(GB)'    = $folderSizeInGB
+            FullPath      = $fullPath
 
         }                        
 
@@ -269,6 +270,8 @@ function Get-FolderSize {
                 'Size(Bytes)' = $grandTotal
                 'Size(MB)'    = $totalFolderSizeInMB
                 'Size(GB)'    = $totalFolderSizeInGB
+                FullPath      = 'N/A'
+
             }
 
             #Add the object to the array
@@ -299,19 +302,19 @@ function Get-FolderSize {
 
                 'csv' {
     
-                    $folderList | Export-Csv -Path $fileName -NoTypeInformation -Force
+                    $folderList | Sort-Object 'Size(Bytes)' -Descending | Export-Csv -Path $fileName -NoTypeInformation -Force
     
                 }
     
                 'xml' {
     
-                    $folderList | Export-Clixml -Path $fileName
+                    $folderList | Sort-Object 'Size(Bytes)' -Descending | Export-Clixml -Path $fileName
     
                 }
     
                 'json' {
     
-                    $folderList | ConvertTo-Json | Out-File -FilePath $fileName -Force
+                    $folderList | Sort-Object 'Size(Bytes)' -Descending | ConvertTo-Json | Out-File -FilePath $fileName -Force
     
                 }
     
@@ -329,6 +332,6 @@ function Get-FolderSize {
     }
 
     #Return the object array with the objects selected in the order specified.
-    Return $folderList
+    Return $folderList | Sort-Object 'Size(Bytes)' -Descending
 
 }
