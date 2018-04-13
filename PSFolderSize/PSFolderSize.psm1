@@ -19,7 +19,7 @@ function Get-FolderSize {
     .PARAMETER BasePath
 
     This parameter allows you to specify the base path you'd like to get the child folders of.
-    It defaults to C:\.
+    It defaults to where the module was run from via (Get-Location).
 
     .PARAMETER FolderName
 
@@ -39,14 +39,20 @@ function Get-FolderSize {
 
     .PARAMETER OutputPath
 
-    Specify the path you want to use when ouputting the results as a csv, xml, or json file.
+    Specify the path you want to use when outputting the results as a csv, xml, or json file.
 
     Do not include a trailing slash.
 
     Example: C:\users\you\Desktop
 
-    Defaults to $PSScriptRoot
-    This will be where you called the script from, or originally imported the module from if being use as a module
+    Defaults to (Get-Location)
+    This will be where you called the module from.
+
+    .PARAMETER OutputFile
+
+    This allows you to specify the path and file name you'd like for output.
+    
+    Example: C:\users\you\desktop\output.csv
 
     .EXAMPLE 
 
@@ -128,38 +134,64 @@ function Get-FolderSize {
     Get-FolderSize.ps1 -OmitFolders 'C:\Temp','C:\Windows'
 
     #>
-    [cmdletbinding()]
+    [cmdletbinding(
+        DefaultParameterSetName = 'default'
+    )]
     param(
-        [Parameter(Mandatory = $false)]
+        [Parameter(
+            Mandatory = $false,
+            Position = 0,
+            ParameterSetName = 'default'
+        )]
         [Alias('Path')]
         [String[]]
-        $BasePath = 'C:\',        
+        $BasePath = (Get-Location),        
 
-        [Parameter(Mandatory = $false)]
+        [Parameter(
+            Mandatory = $false,
+            ParameterSetName = 'default'
+            
+        )]
         [Alias('User')]
         [String[]]
         $FolderName = 'all',
 
-        [Parameter()]
+        [Parameter(
+            ParameterSetName = 'default'
+        )]
         [String[]]
         $OmitFolders,
 
-        [Parameter()]
+        [Parameter(
+            ParameterSetName = 'default'
+        )]
         [Switch]
         $AddTotal,
 
         [Parameter(
-            ParameterSetName = 'output'
+            ParameterSetName = 'default'
+        )]
+        [Parameter(
+            ParameterSetName = 'outputWithType'
         )]
         [ValidateSet('csv','xml','json')]
         [String]        
         $Output,
 
         [Parameter(
-            ParameterSetName = 'output'
+            ParameterSetName = 'default'
+        )]
+        [Parameter(
+            ParameterSetName = 'outputWithType'
         )]
         [String]
-        $OutputPath = $PSScriptRoot
+        $OutputPath = (Get-Location),
+
+        [Parameter(
+            ParameterSetName = 'default'
+        )]
+        [String]
+        $OutputFile = [string]::Empty
     )
 
     #Get a list of all the directories in the base path we're looking for.
@@ -245,33 +277,55 @@ function Get-FolderSize {
 
     }
     
-    if ($Output) {
+    if ($Output -or $OutputFile) {
 
-        $fileName = "{2}\{0:MMddyy_HHmm}.{1}" -f (Get-Date), $Output, $OutputPath
+        if (!$OutputFile) {
 
+            $fileName = "{2}\{0:MMddyy_HHmm}.{1}" -f (Get-Date), $Output, $OutputPath
+
+        } else {
+
+            $fileName = $OutputFile
+            $Output   = $fileName.Substring($fileName.LastIndexOf('.') + 1) 
+
+
+        }
+       
         Write-Verbose "Attempting to export results to -> [$fileName]!"
 
-        switch ($Output) {
+        try {
 
-            'csv' {
+            switch ($Output) {
 
-                $folderList | Export-Csv -Path $fileName -NoTypeInformation -Force
+                'csv' {
+    
+                    $folderList | Export-Csv -Path $fileName -NoTypeInformation -Force
+    
+                }
+    
+                'xml' {
+    
+                    $folderList | Export-Clixml -Path $fileName
+    
+                }
+    
+                'json' {
+    
+                    $folderList | ConvertTo-Json | Out-File -FilePath $fileName -Force
+    
+                }
+    
+            } 
+        } 
 
-            }
+        catch {
 
-            'xml' {
+            $errorMessage = $_.Exception.Message
 
-                $folderList | Export-Clixml -Path $fileName
+            Write-Error "Error exporting file to [$fileName] -> [$errorMessage]!"
 
-            }
-
-            'json' {
-
-                $folderList | ConvertTo-Json | Out-File -FilePath $fileName -Force
-
-            }
-
-        }       
+        }
+      
     }
 
     #Return the object array with the objects selected in the order specified.
