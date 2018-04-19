@@ -457,8 +457,8 @@ function Get-FileReport { #Begin function Get-FileReport
         $fileSize = $file.Length 
             
         #We use the string format operator here to show only 2 decimals, and do some PS Math.
-        $fileSizeInMB = "{0:N2} MB" -f ($fileSize.Sum / 1MB)
-        $fileSizeInGB = "{0:N2} GB" -f ($fileSize.Sum / 1GB)
+        $fileSizeInMB = "{0:N2} MB" -f ($fileSize / 1MB)
+        $fileSizeInGB = "{0:N2} GB" -f ($fileSize / 1GB)
 
         #Here we create a custom object that we'll add to the array
         $folderObject = [PSCustomObject]@{
