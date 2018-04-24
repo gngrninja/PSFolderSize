@@ -10,4 +10,3 @@ $Private = @( Get-ChildItem -Path "$PSScriptRoot\Private\*.ps1" )
 }
 
 Export-ModuleMember -Function $Public.BaseName
-Export-ModuleMember -Variable 'LogPath'
