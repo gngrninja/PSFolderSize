@@ -206,20 +206,6 @@ function Get-FileReport { #Begin function Get-FileReport
     
     }
 
-    if (!(Get-TypeData -TypeName 'PS.File.List.Result')) {
-
-        #Change the default view
-        $typeInfo = @{
-
-            TypeName = 'PS.File.List.Result'
-            DefaultDisplayPropertySet = 'FileName', 'Size(MB)', 'Size(GB)','FullPath'
-
-        }
-
-        Update-TypeData @typeInfo
-
-    }
-
     #Return the object array with the objects selected in the order specified.
     Return $fileList | Sort-Object 'Size(Bytes)' -Descending
 

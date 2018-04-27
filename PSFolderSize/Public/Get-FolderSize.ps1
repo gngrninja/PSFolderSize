@@ -332,20 +332,6 @@ function Get-FolderSize {
       
     }
 
-    if (!(Get-TypeData -TypeName 'PS.Folder.List.Result')) {
-
-        #Change the default view
-        $typeInfo = @{
-
-            TypeName = 'PS.Folder.List.Result'
-            DefaultDisplayPropertySet = 'FolderName', 'Size(MB)', 'Size(GB)','FullPath'
-
-        }
-
-        Update-TypeData @typeInfo
-
-    }
-
     #Return the object array with the objects selected in the order specified.
     Return $folderList | Sort-Object 'Size(Bytes)' -Descending
 
