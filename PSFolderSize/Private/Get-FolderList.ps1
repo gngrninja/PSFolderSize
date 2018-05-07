@@ -19,8 +19,7 @@ function Get-FolderList {
 
         $allFolders = Get-ChildItem $BasePath -Directory -Force | Where-Object {$_.FullName -notin $OmitFolders}
 
-    }
-    elseif ($FolderName -ne 'all' -and $FindExtension) {
+    } elseif ($FolderName -ne 'all' -and $FindExtension) {
 
         $allFolders = Get-ChildItem $BasePath -Force -Recurse | Where-Object {($_.BaseName -like $FolderName) -and ($_.FullName -notin $OmitFolders) -and ($_.Extension -in $FindExtension)}        
 
