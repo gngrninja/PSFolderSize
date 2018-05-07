@@ -67,16 +67,7 @@ function Get-FileReport { #Begin function Get-FileReport
     )
 
     #Get a list of all the directories in the base path we're looking for.
-    if ($folderName -eq 'all') {
-
-        $allFolders = Get-ChildItem $BasePath -Force -Recurse | Where-Object {($_.FullName -notin $OmitFolders) -and ($_.Extension -in $FindExtension)}
-
-    }
-    else {
-
-        $allFolders = Get-ChildItem $basePath -Force -Recurse | Where-Object {($_.BaseName -like $FolderName) -and ($_.FullName -notin $OmitFolders) -and ($_.Extension -in $FindExtension)}
-
-    }
+    $allFolders = Get-FolderList -FolderName $FolderName -FindExtension $FindExtension -OmitFolders $OmitFolders -BasePath $BasePath
 
     $foundFiles = $null
 
@@ -86,7 +77,7 @@ function Get-FileReport { #Begin function Get-FileReport
     #Go through each folder in the base path.
     ForEach ($file in $allFolders) {
 
-        #Clear out the variables used in the loop.        
+        #Clear out the variables used in the loop.      
         $fullPath      = $null        
         $folderObject  = $null
         $fileSize      = $null

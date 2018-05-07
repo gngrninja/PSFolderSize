@@ -195,17 +195,8 @@ function Get-FolderSize {
     )
 
     #Get a list of all the directories in the base path we're looking for.
-    if ($folderName -eq 'all') {
-
-        $allFolders = Get-ChildItem $BasePath -Directory -Force | Where-Object {$_.FullName -notin $OmitFolders}
-
-    }
-    else {
-
-        $allFolders = Get-ChildItem $basePath -Directory -Force | Where-Object {($_.BaseName -like $FolderName) -and ($_.FullName -notin $OmitFolders)}
-
-    }
-
+    $allFolders = Get-FolderList -FolderName $FolderName -OmitFolders $OmitFolders -BasePath $BasePath
+    
     #Create array to store folder objects found with size info.
     [System.Collections.ArrayList]$folderList = @()
 
