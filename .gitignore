@@ -1,3 +1,4 @@
 *.json
 *.csv
 *.xml
+.DS_Store
