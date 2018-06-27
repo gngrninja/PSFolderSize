@@ -32,9 +32,10 @@ function Get-FolderList {
     #Test for null, return just folder if no subfolders
     $splitPath = Split-Path $BasePath
     
-    if ((Test-Path -Path $splitPath -ErrorAction SilentlyContinue) -and ($allFolders -eq $null)) {
-                
-        $allFolders = Get-ChildItem -Path $splitPath -Directory | Where-Object {$_.FullName -eq $BasePath.TrimEnd('/').TrimEnd('\')}
+    if (($allFolders -eq $null) -and (Test-Path -Path $splitPath -ErrorAction SilentlyContinue)) {
+        
+        $findName   = Split-Path $BasePath -Leaf        
+        $allFolders = Get-ChildItem -Path $splitPath -Directory | Where-Object {$_.Name -eq $findName}
                 
     }
 
