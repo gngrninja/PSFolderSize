@@ -191,9 +191,15 @@ function Get-FolderSize {
             ParameterSetName = 'default'
         )]
         [String]
-        $OutputFile = [string]::Empty
+        $OutputFile = [string]::Empty,
+        [Parameter(
+            ParameterSetName = 'default'
+        )]
+        [Switch]
+        $Parallel
     )
 
+    $maxJobs = 2
     #Get a list of all the directories in the base path we're looking for.
     $allFolders = Get-FolderList -FolderName $FolderName -OmitFolders $OmitFolders -BasePath $BasePath
     
@@ -202,7 +208,6 @@ function Get-FolderSize {
 
     #Go through each folder in the base path.
     ForEach ($folder in $allFolders) {
-
         #Clear out the variables used in the loop.
         $fullPath       = $null        
         $folderObject   = $null
@@ -215,29 +220,112 @@ function Get-FolderSize {
         $fullPath       = $folder.FullName
         $folderBaseName = $folder.BaseName     
 
-        Write-Verbose "Working with [$fullPath]..."            
+        Write-Verbose "Working with [$fullPath]..."  
 
-        #Get folder info / sizes
-        $folderSize = Get-Childitem -Path $fullPath -Recurse -Force -ErrorAction SilentlyContinue | Measure-Object -Property Length -Sum -ErrorAction SilentlyContinue       
+        if (!$Parallel) {         
+
+            #Get folder info / sizes
+            $folderSize = Get-Childitem -Path $fullPath -Recurse -Force -ErrorAction SilentlyContinue | Measure-Object -Property Length -Sum -ErrorAction SilentlyContinue       
+                
+            #We use the string format operator here to show only 2 decimals, and do some PS Math.
+            [double]$folderSizeInMB = "{0:N2}" -f ($folderSize.Sum / 1MB)
+            [double]$folderSizeInGB = "{0:N2}" -f ($folderSize.Sum / 1GB)
+
+            #Here we create a custom object that we'll add to the array
+            $folderObject = [PSCustomObject]@{
+
+                PSTypeName    = 'PS.Folder.List.Result'
+                FolderName    = $folderBaseName
+                'Size(Bytes)' = $folderSize.Sum
+                'Size(MB)'    = $folderSizeInMB
+                'Size(GB)'    = $folderSizeInGB
+                FullPath      = $fullPath
+
+            }                        
+
+            #Add the object to the array
+            $folderList.Add($folderObject) | Out-Null
+
+        } else {
             
-        #We use the string format operator here to show only 2 decimals, and do some PS Math.
-        [double]$folderSizeInMB = "{0:N2}" -f ($folderSize.Sum / 1MB)
-        [double]$folderSizeInGB = "{0:N2}" -f ($folderSize.Sum / 1GB)
+            #$jobString = [string]::Empty
+            #$jobString = [scriptblock]::Create("Get-Childitem -Path $fullPath -Recurse -Force -ErrorAction SilentlyContinue | Measure-Object -Property Length -Sum -ErrorAction SilentlyContinue")
+            #Start-Job -Name $fullPath -ScriptBlock $jobString -Verbose
+            Write-Host "Enumerating folders for [$fullPath]!"
+            $getAllFolders = $null
+            $getAllFolders = Get-ChildItem -Path $fullPath -Directory -Force -ErrorAction SilentlyContinue 
+            
+            $getAllFolders | ForEach-Object {
 
-        #Here we create a custom object that we'll add to the array
-        $folderObject = [PSCustomObject]@{
+                $curFolderName = [string]::Empty
+                $curFolderName = $_.FullName
 
-            PSTypeName    = 'PS.Folder.List.Result'
-            FolderName    = $folderBaseName
-            'Size(Bytes)' = $folderSize.Sum
-            'Size(MB)'    = $folderSizeInMB
-            'Size(GB)'    = $folderSizeInGB
-            FullPath      = $fullPath
+                Write-Host "Working with [$curFolderName]"
+                
+                $jobString = $null                
+                $jobString = [scriptblock]::Create("Get-Childitem -Path $curFolderName -Recurse -Force -ErrorAction SilentlyContinue | Measure-Object -Property Length -Sum -ErrorAction SilentlyContinue")    
+                
+                Start-Job -ScriptBlock $jobString -Verbose
 
-        }                        
+                $jobs = Get-Job
 
-        #Add the object to the array
-        $folderList.Add($folderObject) | Out-Null
+                if ($jobs.Count -gt $maxJobs) {
+
+                    Write-Host "Waiting for some jobs to complete... currently [$numJobsGoing] running."
+                    
+                    while ((Get-Job | Where-Object {$_.State -eq 'Running'}).Count -gt $maxJobs) {
+                        foreach ($job in $jobs) {
+
+                            switch ($job.State) {
+
+                                'Running' {
+    
+                                    Write-Host "Job [$($job.Name) is still running]"
+    
+                                }
+    
+                                'Completed' {
+    
+                                    Write-Host "Job [$($job.Name) completed]"
+
+                                    if ($jobs.ChildJobs[0].Error) {
+
+                                        $errorMessage = $job.ChildJobs.Error | Out-String
+                                        Write-Host "Job completed with an error -> [$errorMessage]!"
+
+                                    } else {
+
+                                        Write-Host "No errors!"
+
+                                    }
+                                    Receive-Job $job.Name 
+                                    Remove-Job $job.Name
+
+                                }
+                                'Failed' {
+
+                                    $failReason = $job.ChildJobs[0].JobStateInfo.Reason.Message
+                                    Write-Host "Job failed with message -> [$failReason]" -ForegroundColor Red -BackgroundColor DarkBlue
+                                    Remove-Job $job.Name -Force
+
+                                }
+                            }
+                        }
+
+                        $jobs = Get-Job
+                        $jobs | select Name,State
+                        Start-Sleep -Seconds 2
+                    }                
+
+                }
+            }            
+            #Get-Job / Name
+            #ChildJobs / Output
+
+            #No recurse on first, PSIsContainer loop?
+
+        }     
+
 
     }
 
