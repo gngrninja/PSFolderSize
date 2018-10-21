@@ -7,6 +7,8 @@ environment:
   snowflake:
     secure: hwdG7JCG0zY1bZ2wfCFoNBdXsWKBEfT+DDnTMi5IzKxDp/6uj1taMBEkynRlCzX0
 
+clone_folder: c:\projects\PSFolderSize
+
 version: 0.1.0.{build}
 skip_commits:
   message: /updated readme.*|update readme.*s/

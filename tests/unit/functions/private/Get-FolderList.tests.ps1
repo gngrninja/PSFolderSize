@@ -39,8 +39,8 @@ InModuleScope PSFolderSize {
             $folders   = Get-FolderList -FolderName 'all' -FindExtension $extension -BasePath $resolvedPath
             
             $folders.Count       | Should Be 2
-            $folders[0].FullName | Should Be "$($resolvedPath)$($dirSeparator)folder2$($dirSeparator)file2.file"
-            $folders[1].FullName | Should Be "$($resolvedPath)$($dirSeparator)folder1$($dirSeparator)file1.file"
+            $folders.FullName | Should Contain "$($resolvedPath)$($dirSeparator)folder2$($dirSeparator)file2.file"
+            $folders.FullName | Should Contain "$($resolvedPath)$($dirSeparator)folder1$($dirSeparator)file1.file"
 
         }
 
