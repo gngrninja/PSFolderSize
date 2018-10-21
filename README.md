@@ -1,29 +1,33 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/dc0dfydghko3jck5/branch/master?svg=true)](https://ci.appveyor.com/project/gngrninja/psfoldersize/branch/master)
+[![Documentation Status](https://readthedocs.org/projects/psfoldersize/badge/?version=latest)](https://psfoldersize.readthedocs.io/en/latest/?badge=latest)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 [![PSFolderSize](https://static1.squarespace.com/static/5644323de4b07810c0b6db7b/t/5bcc1e9e419202a53790e662/1540103847317/PSFolderSize.png)](https://www.gngrninja.com/script-ninja/2016/5/24/powershell-calculating-folder-sizes)
 
 # PowerShell -> Get Folder Sizes
-This module enables you get gather folder size information, and output the results in various ways.
+This module enables you to gather folder size information, and output the results in various ways.
 
 Article for this repository is here:
 https://www.gngrninja.com/script-ninja/2016/5/24/powershell-calculating-folder-sizes
 
 ## Getting Started
-You can import the module by using: 
+
+Install via the [PowerShell Gallery](https://www.powershellgallery.com/packages/PSFolderSize/):
+
+```powershell
+Install-Module PSFolderSize
+```
+
+If you manually cloned/downloaded the code:
 
 ```powershell
 Import-Module .\path\to\PSFolderSize.psd1
 ```
+
 -or-
+
 ```powershell
 Import-Module .\path\to\FolderModuleFilesAreIn
-```
--or-
-
-Via the PowerShell Gallery:
-
-```powershell
-Install-Module PSFolderSize
 ```
 
 Once it is imported, use...
