@@ -11,11 +11,6 @@ function Get-FolderSize {
     This function will get the folder size in MB and GB of folders found in the basePath parameter. 
     The basePath parameter defaults to C:\Users. You can also specify a specific folder name via the folderName parameter.
 
-    VERSION HISTORY:
-    1.0 - Updated object creation, removed try/catch that was causing issues 
-    0.5 - Just created!
-
-
     .PARAMETER BasePath
 
     This parameter allows you to specify the base path you'd like to get the child folders of.
@@ -57,10 +52,10 @@ function Get-FolderSize {
     .EXAMPLE 
 
     Get-FolderSize | Format-Table -AutoSize
-    -------------------------------------
+
 
     FolderName                Size(Bytes) Size(MB)     Size(GB)
-    ----------                ----------- --------     --------
+   
     $GetCurrent                    193768 0.18 MB      0.00 GB
     $RECYCLE.BIN                 20649823 19.69 MB     0.02 GB
     $SysReset                    53267392 50.80 MB     0.05 GB
@@ -71,10 +66,10 @@ function Get-FolderSize {
     .EXAMPLE 
 
     Get-FolderSize -BasePath 'C:\Program Files'
-    -------------------------------------
+    
 
     FolderName                                   Size(Bytes) Size(MB)    Size(GB)
-    ----------                                   ----------- --------    --------
+
     7-Zip                                            4588532 4.38 MB     0.00 GB
     Adobe                                         3567833029 3,402.55 MB 3.32 GB
     Application Verifier                              353569 0.34 MB     0.00 GB
@@ -84,20 +79,20 @@ function Get-FolderSize {
     .EXAMPLE 
 
     Get-FolderSize -BasePath 'C:\Program Files' -FolderName IIS
-    -------------------------------------
+
 
     FolderName Size(Bytes) Size(MB) Size(GB)
-    ---------- ----------- -------- --------
+  
     IIS            5480411 5.23 MB  0.01 GB
 
     .EXAMPLE
 
     $getFolderSize = Get-FolderSize 
     $getFolderSize | Format-Table -AutoSize
-    -------------------------------------
+
 
     FolderName Size(GB) Size(MB)
-    ---------- -------- --------
+  
     Public     0.00 GB  0.00 MB
     thegn      2.39 GB  2,442.99 MB
 
@@ -105,10 +100,10 @@ function Get-FolderSize {
 
     $getFolderSize = Get-FolderSize -Output csv -OutputPath ~\Desktop
     $getFolderSize 
-    -------------------------------------
+  
 
     FolderName Size(GB) Size(MB)
-    ---------- -------- --------
+    
     Public     0.00 GB  0.00 MB
     thegn      2.39 GB  2,442.99 MB
 
@@ -119,10 +114,10 @@ function Get-FolderSize {
     Sort by size descending 
     $getFolderSize = Get-FolderSize | Sort-Object 'Size(Bytes)' -Descending
     $getFolderSize 
-    -------------------------------------
+
 
     FolderName                Size(Bytes) Size(MB)     Size(GB)
-    ----------                ----------- --------     --------
+
     Users                     76280394429 72,746.65 MB 71.04 GB
     Games                     48522184491 46,274.36 MB 45.19 GB
     Program Files (x86)       27752593691 26,466.94 MB 25.85 GB
@@ -221,8 +216,8 @@ function Get-FolderSize {
         $folderSize = Get-Childitem -Path $fullPath -Recurse -Force -ErrorAction SilentlyContinue | Measure-Object -Property Length -Sum -ErrorAction SilentlyContinue       
             
         #We use the string format operator here to show only 2 decimals, and do some PS Math.
-        [double]$folderSizeInMB = "{0:N2}" -f ($folderSize.Sum / 1MB)
-        [double]$folderSizeInGB = "{0:N2}" -f ($folderSize.Sum / 1GB)
+        $folderSizeInMB = "{0:N2}" -f ($folderSize.Sum / 1MB)
+        $folderSizeInGB = "{0:N2}" -f ($folderSize.Sum / 1GB)
 
         #Here we create a custom object that we'll add to the array
         $folderObject = [PSCustomObject]@{
@@ -253,8 +248,8 @@ function Get-FolderSize {
 
             }
 
-            [double]$totalFolderSizeInMB = "{0:N2}" -f ($grandTotal / 1MB)
-            [double]$totalFolderSizeInGB = "{0:N2}" -f ($grandTotal / 1GB)
+            $totalFolderSizeInMB = "{0:N2}" -f ($grandTotal / 1MB)
+            $totalFolderSizeInGB = "{0:N2}" -f ($grandTotal / 1GB)
 
             $folderObject = [PSCustomObject]@{
 

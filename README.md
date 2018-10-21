@@ -1,3 +1,5 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/dc0dfydghko3jck5/branch/master?svg=true)](https://ci.appveyor.com/project/gngrninja/psfoldersize/branch/master)
+
 # PowerShell -> Get Folder Sizes
 This module enables you get gather folder size information, and output the results in various ways.
 
