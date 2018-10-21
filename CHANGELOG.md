@@ -21,7 +21,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 - Fixed number formatting for DE.
 
-###Added
+### Added
 - Added file listing under root search folder.
     - The files will show up under FolderName until I figure out a better approach for this. This was added for a better GrandTotal amount when files were in the root of a folder listed.
 - Added more documentation.
