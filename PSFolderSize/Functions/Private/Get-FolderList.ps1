@@ -17,7 +17,7 @@ function Get-FolderList {
     #All folders and look for files with a particular extension
     if ($FolderName -eq 'all' -and $FindExtension) {
 
-        $allFolders = Get-ChildItem -Path $BasePath -Force -Recurse | 
+        $allFolders = Get-ChildItem -LiteralPath $BasePath -Force -Recurse | 
             Where-Object {
                 ($_.FullName -notin $OmitFolders) -and 
                 ($_.Extension -in $FindExtension)
@@ -26,7 +26,7 @@ function Get-FolderList {
     #All folders
     } elseif ($FolderName -eq 'all') {
 
-        $allFolders = Get-ChildItem $BasePath -Force | 
+        $allFolders = Get-ChildItem -LiteralPath $BasePath -Force | 
             Where-Object {
                 $_.FullName -notin $OmitFolders
             }
@@ -34,7 +34,7 @@ function Get-FolderList {
     #Specified folder names and look for files with a particular extension
     } elseif ($FolderName -ne 'all' -and $FindExtension) {
 
-        $allFolders = Get-ChildItem -Path $BasePath -Force -Recurse | 
+        $allFolders = Get-ChildItem -LiteralPath $BasePath -Force -Recurse | 
             Where-Object {
                 ($_.FullName -match ".+$FolderName.+")   -and 
                 ($_.FullName -notin $OmitFolders) -and 
@@ -43,7 +43,7 @@ function Get-FolderList {
             
     } else {
 
-        $allFolders = Get-ChildItem -Path $BasePath -Force | 
+        $allFolders = Get-ChildItem -LiteralPath $BasePath -Force | 
             Where-Object {
                 ($_.BaseName -match "$FolderName") -and 
                 ($_.FullName -notin $OmitFolders)
@@ -57,7 +57,7 @@ function Get-FolderList {
     if (!($allFolders) -and (Test-Path -Path $splitPath -ErrorAction SilentlyContinue)) {
         
         $findName   = Split-Path $BasePath -Leaf        
-        $allFolders = Get-ChildItem -Path $splitPath | 
+        $allFolders = Get-ChildItem -LiteralPath $splitPath | 
             Where-Object {
                 $_.Name -eq $findName
             }

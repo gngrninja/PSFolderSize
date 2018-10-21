@@ -213,7 +213,7 @@ function Get-FolderSize {
         Write-Verbose "Working with [$fullPath]..."            
 
         #Get folder info / sizes
-        $folderSize = Get-Childitem -Path $fullPath -Recurse -Force -ErrorAction SilentlyContinue | Measure-Object -Property Length -Sum -ErrorAction SilentlyContinue       
+        $folderSize = Get-Childitem -LiteralPath $fullPath -Recurse -Force -ErrorAction SilentlyContinue | Measure-Object -Property Length -Sum -ErrorAction SilentlyContinue       
             
         #We use the string format operator here to show only 2 decimals, and do some PS Math.
         $folderSizeInMB = "{0:N2}" -f ($folderSize.Sum / 1MB)
