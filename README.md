@@ -1,5 +1,7 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/dc0dfydghko3jck5/branch/master?svg=true)](https://ci.appveyor.com/project/gngrninja/psfoldersize/branch/master)
 
+[![PSFolderSize](https://static1.squarespace.com/static/5644323de4b07810c0b6db7b/t/5bcc1e9e419202a53790e662/1540103847317/PSFolderSize.png)](https://www.gngrninja.com/script-ninja/2016/5/24/powershell-calculating-folder-sizes)
+
 # PowerShell -> Get Folder Sizes
 This module enables you get gather folder size information, and output the results in various ways.
 
