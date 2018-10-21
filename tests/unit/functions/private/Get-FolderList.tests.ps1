@@ -12,10 +12,10 @@ InModuleScope PSFolderSize {
             $folders = Get-FolderList -FolderName 'all' -BasePath $resolvedPath
             
             $folders.Count       | Should Be 2
-            $folders[0].Name     | Should Be 'folder1'
-            $folders[1].Name     | Should Be 'folder2'
-            $folders[0].FullName | Should Be "$($resolvedPath)$($dirSeparator)folder1"
-            $folders[1].FullName | Should Be "$($resolvedPath)$($dirSeparator)folder2"
+            $folders.Name        | Should Contain 'folder1'
+            $folders.Name        | Should Contain 'folder2'
+            $folders | Where-Object {$_.Name -eq 'folder1'} | Should Be "$($resolvedPath)$($dirSeparator)folder1"
+            $folders | Where-Object {$_.Name -eq 'folder2'} | Should Be "$($resolvedPath)$($dirSeparator)folder2"
  
         }
 

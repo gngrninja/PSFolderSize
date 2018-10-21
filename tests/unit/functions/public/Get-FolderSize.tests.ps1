@@ -17,10 +17,11 @@ InModuleScope PSFolderSize {
             Pop-Location
 
             $folderSize                  | Should Not Be $Null
-            $folderSize[0].FolderName    | Should Be 'folder2'
-            $folderSize[0].'Size(Bytes)' | Should Be 60
-            $folderSize[1].FolderName    | Should Be 'folder1'
-            $folderSize[1].'Size(Bytes)' | Should Be 38
+            $folderSize.FolderName       | Should Contain 'folder2'
+            $folderSize.FolderName       | Should Contain 'folder1'
+
+            ($folderSize | Where-Object {$_.FolderName -eq 'folder2'}).'Size(Bytes)' | Should Be 60
+            ($folderSize | Where-Object {$_.FolderName -eq 'folder1'}).'Size(Bytes)' | Should Be 38
 
         }
 
@@ -30,24 +31,24 @@ InModuleScope PSFolderSize {
             $folderSize = Get-FolderSize -Path $resolvedPath 
 
             $folderSize                  | Should Not Be $Null
-            $folderSize[0].FolderName    | Should Be 'folder2'
-            $folderSize[0].'Size(Bytes)' | Should Be 60
-            $folderSize[1].FolderName    | Should Be 'folder1'
-            $folderSize[1].'Size(Bytes)' | Should Be 38
+            $folderSize.FolderName       | Should Contain 'folder2'
+            $folderSize.FolderName       | Should Contain 'folder1'
+
+            ($folderSize | Where-Object {$_.FolderName -eq 'folder2'}).'Size(Bytes)' | Should Be 60
+            ($folderSize | Where-Object {$_.FolderName -eq 'folder1'}).'Size(Bytes)' | Should Be 38
 
         }
 
         it 'Allows folder omission' {
 
             $folderSize = $null
-            $folderSize = Get-FolderSize -Path $resolvedPath -OmitFolders 'folder1'
+            $folderSize = Get-FolderSize -Path $resolvedPath -OmitFolders "$($resolvedPath)$($dirSeparator)folder1"
 
-            $folderSize                  | Should Not Be $Null
-            $folderSize[0].FolderName    | Should Be 'folder2'
-            $folderSize[0].'Size(Bytes)' | Should Be 60
-            $folderSize[1].FolderName    | Should Be 'folder1'
-            $folderSize[1].'Size(Bytes)' | Should Be 38
-
+            $folderSize            | Should Not Be $Null
+            $folderSize.FolderName | Should Contain 'folder2'
+            $folderSize.FolderName | Should Not Contain 'folder1'
+            ($folderSize | Where-Object {$_.FolderName -eq 'folder2'}).'Size(Bytes)' | Should Be 60
+  
         }
     }
 }
