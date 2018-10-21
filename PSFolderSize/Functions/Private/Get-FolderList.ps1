@@ -26,7 +26,7 @@ function Get-FolderList {
     #All folders
     } elseif ($FolderName -eq 'all') {
 
-        $allFolders = Get-ChildItem $BasePath -Directory -Force | 
+        $allFolders = Get-ChildItem $BasePath -Force | 
             Where-Object {
                 $_.FullName -notin $OmitFolders
             }
@@ -43,7 +43,7 @@ function Get-FolderList {
             
     } else {
 
-        $allFolders = Get-ChildItem -Path $BasePath -Directory -Force | 
+        $allFolders = Get-ChildItem -Path $BasePath -Force | 
             Where-Object {
                 ($_.BaseName -match "$FolderName") -and 
                 ($_.FullName -notin $OmitFolders)
@@ -57,7 +57,7 @@ function Get-FolderList {
     if (!($allFolders) -and (Test-Path -Path $splitPath -ErrorAction SilentlyContinue)) {
         
         $findName   = Split-Path $BasePath -Leaf        
-        $allFolders = Get-ChildItem -Path $splitPath -Directory | 
+        $allFolders = Get-ChildItem -Path $splitPath | 
             Where-Object {
                 $_.Name -eq $findName
             }

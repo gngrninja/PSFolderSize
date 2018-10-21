@@ -7,12 +7,13 @@ InModuleScope PSFolderSize {
         $resolvedPath = Resolve-Path -Path $artifactPath      
 
         it 'Lists all folders in a directory' {
-
+            
             $resolvedPath = Resolve-Path -Path $artifactPath  
             $folders = $null
             $folders = Get-FolderList -FolderName 'all' -BasePath $resolvedPath
                         
             $folders.Count | Should Be 2
+           
 
             switch ($PSVersionTable.PSEdition) {
 

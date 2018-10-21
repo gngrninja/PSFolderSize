@@ -96,6 +96,8 @@ task Pester -Depends Build {
 
     }
 
+    Remove-Item -Path $testResultsXml
+    
     if ($testResults.FailedCount -gt 0) {
 
         $testResults | Format-List

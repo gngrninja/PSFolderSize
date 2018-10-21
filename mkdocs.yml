@@ -1,0 +1,8 @@
+site_name: PSFolderSize
+repo_url: https://github.com/gngrninja/PSFolderSize
+theme: readthedocs
+nav:
+  - Home: index.md
+  - Reference: 
+    - Functions: 
+      - Get-FolderSize: reference/functions/Get-FolderSize.md
