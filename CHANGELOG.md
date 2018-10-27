@@ -5,9 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [1.6.5] Unreleased
+## [Unreleased] 
 
-### Changed
+### Adding
+- Ability to use wildcards if looking for files
+- Ability to find file with a particular extension
+- Ability to use robocopy if specified
+
+### Changing
 
 - Adding tests/official support for Get-FileReport.
 
