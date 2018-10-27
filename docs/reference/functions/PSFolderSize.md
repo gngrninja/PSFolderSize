@@ -1,6 +1,6 @@
 ---
 Module Name: PSFolderSize
-Module Guid: 36ced1e4-028a-4687-8a7c-7ad4a4ca1df6 36ced1e4-028a-4687-8a7c-7ad4a4ca1df6
+Module Guid: 36ced1e4-028a-4687-8a7c-7ad4a4ca1df6
 Download Help Link: {{Please enter FwLink manually}}
 Help Version: {{Please enter version of help manually (X.X.X.X) format}}
 Locale: en-US
