@@ -17,7 +17,7 @@ You can change the base path, omit folders, as well as output results in various
 ### default (Default)
 ```
 Get-FolderSize [[-BasePath] <String[]>] [-FolderName <String[]>] [-OmitFolders <String[]>] [-AddTotal]
- [-Output <String>] [-OutputPath <String>] [-OutputFile <String>] [<CommonParameters>]
+ [-UseRobo] [-Output <String>] [-OutputPath <String>] [-OutputFile <String>] [<CommonParameters>]
 ```
 
 ### outputWithType
@@ -143,7 +143,7 @@ This parameter allows you to specify the name of a specific folder you'd like to
 ```yaml
 Type: String[]
 Parameter Sets: default
-Aliases: User
+Aliases: Name
 
 Required: False
 Position: Named
@@ -169,6 +169,21 @@ Accept wildcard characters: False
 
 ### -AddTotal
 This parameter adds a total count at the end of the array
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: default
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -UseRobo
+{{Fill UseRobo Description}}
 
 ```yaml
 Type: SwitchParameter

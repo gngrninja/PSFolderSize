@@ -30,7 +30,7 @@ Get-FileReport [-Output <String>] [-OutputPath <String>] [<CommonParameters>]
 ## EXAMPLES
 
 ### Example 1
-```
+```powershell
 PS C:\> {{ Add example code here }}
 ```
 
@@ -48,7 +48,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: False
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -166,6 +166,7 @@ For more information, see about_CommonParameters (http://go.microsoft.com/fwlink
 ## INPUTS
 
 ### None
+
 ## OUTPUTS
 
 ### System.Object
