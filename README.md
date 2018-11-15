@@ -1,4 +1,4 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/dc0dfydghko3jck5/branch/master?svg=true)](https://ci.appveyor.com/project/gngrninja/psfoldersize/branch/master)
+[![Build status](https://ci.appveyor.com/api/projects/status/dc0dfydghko3jck5/branch/master?svg=true)](https://ci.appveyor.com/project/gngrninja/psfoldersize/branch/master) [![Build Status](https://dev.azure.com/ginja/PSFolderSize/_apis/build/status/PSFolderSize-CI)](https://dev.azure.com/ginja/PSFolderSize/_build/latest?definitionId=3)
 [![Documentation Status](https://readthedocs.org/projects/psfoldersize/badge/?version=latest)](https://psfoldersize.readthedocs.io/en/latest/?badge=latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 

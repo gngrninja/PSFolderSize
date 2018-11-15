@@ -95,8 +95,6 @@ task Pester -Depends Build {
         $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", $testResultsXml)
 
     }
-
-    Remove-Item -Path $testResultsXml
     
     if ($testResults.FailedCount -gt 0) {
 
