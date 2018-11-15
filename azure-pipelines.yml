@@ -26,17 +26,3 @@ jobs:
         testResultsFiles: '**/tests/artifacts/testResults.xml'
         testRunTitle: 'PSCore_Ubuntu1604'
       displayName: 'Publish Test Results'
-
-  - job: Build_PSCore_MacOS1013
-    pool:
-      vmImage: xcode9-macos10.13
-    steps:
-    - script: |
-        pwsh -c './build.ps1 -Task Test -Verbose'
-      displayName: 'Build and Test'
-    - task: PublishTestResults@2
-      inputs:
-        testRunner: 'NUnit'
-        testResultsFiles: '**/tests/artifacts/testResults.xml'
-        testRunTitle: 'PSCore_MacOS1013'
-      displayName: 'Publish Test Results'
