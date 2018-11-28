@@ -201,6 +201,9 @@ function Get-FolderSize {
     #Create array to store folder objects found with size info.
     [System.Collections.ArrayList]$folderList = @()
 
+    #Get hostname
+    $hostName = [System.Net.Dns]::GetHostByName((hostname)).HostName
+
     #Go through each folder in the base path.
     ForEach ($folder in $allFolders) {
 
@@ -246,6 +249,7 @@ function Get-FolderSize {
             'Size(MB)'    = $folderSizeInMB
             'Size(GB)'    = $folderSizeInGB
             FullPath      = $fullPath
+            HostName      = $hostName
 
         }                        
 
@@ -276,6 +280,7 @@ function Get-FolderSize {
                 'Size(MB)'    = $totalFolderSizeInMB
                 'Size(GB)'    = $totalFolderSizeInGB
                 FullPath      = 'N/A'
+                HostName      = $hostName
 
             }
 

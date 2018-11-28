@@ -16,6 +16,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 - Adding tests/official support for Get-FileReport.
 
+## [1.6.4] 2018-11-28
+### Added
+- Added hostname to results
 
 ## [1.6.3] 2018-10-21
 ### Fixed
