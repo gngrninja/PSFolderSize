@@ -18,6 +18,9 @@
                         <Width>12</Width>
                     </TableColumnHeader>
                     <TableColumnHeader>
+                        <Width>12</Width>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
                     </TableColumnHeader>
                 </TableHeaders>
                 <TableRowEntries>
@@ -32,6 +35,9 @@
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Size(GB)</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>FileCount</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>FullPath</PropertyName>

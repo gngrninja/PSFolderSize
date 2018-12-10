@@ -208,13 +208,15 @@ function Get-FolderSize {
     ForEach ($folder in $allFolders) {
 
         #Clear out the variables used in the loop.
-        $fullPath          = $null        
+        $fullPath          = $null
+        $folderInfo        = $null        
         $folderObject      = $null
         $folderSize        = $null
         $folderSizeInBytes = $null
         $folderSizeInMB    = $null
         $folderSizeInGB    = $null
         $folderBaseName    = $null
+        $totalFiles        = $null
 
         #Store the full path to the folder and its name in separate variables
         $fullPath       = $folder.FullName
@@ -232,11 +234,14 @@ function Get-FolderSize {
 
         } else {
 
-            $folderSize = Get-Childitem -LiteralPath $fullPath -Recurse -Force -ErrorAction SilentlyContinue | Measure-Object -Property Length -Sum -ErrorAction SilentlyContinue       
+            $folderInfo = Get-Childitem -LiteralPath $fullPath -Recurse -Force -ErrorAction SilentlyContinue 
+            $folderSize = $folderInfo | Measure-Object -Property Length -Sum -ErrorAction SilentlyContinue       
+            $totalFiles = ($folderInfo | Where-Object {!$_.PSIsContainer}).Count
             #We use the string format operator here to show only 2 decimals, and do some PS Math.
             $folderSizeInBytes = $folderSize.Sum
             $folderSizeInMB    = "{0:N2}" -f ($folderSize.Sum / 1MB)
             $folderSizeInGB    = "{0:N2}" -f ($folderSize.Sum / 1GB)
+            
 
         }
         
@@ -248,7 +253,8 @@ function Get-FolderSize {
             'Size(Bytes)' = $folderSizeInBytes
             'Size(MB)'    = $folderSizeInMB
             'Size(GB)'    = $folderSizeInGB
-            FullPath      = $fullPath
+            FileCount     = $totalFiles
+            FullPath      = $fullPath            
             HostName      = $hostName
 
         }                        
@@ -260,13 +266,20 @@ function Get-FolderSize {
 
     if ($AddTotal) {
 
-        $grandTotal = $null
+        $grandTotal      = $null
+        $grandTotalFiles = $null
 
         if ($folderList.Count -gt 1) {
         
             $folderList | ForEach-Object {
 
                 $grandTotal += $_.'Size(Bytes)'    
+
+            }
+
+            $folderList | ForEach-Object {
+
+                $grandTotalFiles += $_.FileCount   
 
             }
 
@@ -279,7 +292,8 @@ function Get-FolderSize {
                 'Size(Bytes)' = $grandTotal
                 'Size(MB)'    = $totalFolderSizeInMB
                 'Size(GB)'    = $totalFolderSizeInGB
-                FullPath      = 'N/A'
+                FileCount     = $grandTotalFiles
+                FullPath      = 'N/A'                
                 HostName      = $hostName
 
             }
