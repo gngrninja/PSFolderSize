@@ -13,8 +13,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Ability to use robocopy if specified
 
 ### Changing
+- Adding tests/official support for Get-FileReport
 
-- Adding tests/official support for Get-FileReport.
+## [1.6.5] 2018-12-10
+### Added
+- Added FileCount to results, as well as to grand total
 
 ## [1.6.4] 2018-11-28
 ### Added
@@ -33,12 +36,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [1.6.1] 2018-10-21
 ### Fixed
 
-- Fixed number formatting for DE.
+- Fixed number formatting for DE
 
 ### Added
-- Added file listing under root search folder.
+- Added file listing under root search folder
     - The files will show up under FolderName until I figure out a better approach for this. This was added for a better GrandTotal amount when files were in the root of a folder listed.
-- Added more documentation.
+- Added more documentation
   
 ### Changed
-- Folder structure in repo, added build + tests.
+- Folder structure in repo, added build + tests
