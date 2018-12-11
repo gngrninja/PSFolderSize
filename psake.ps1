@@ -106,6 +106,8 @@ task Pester -Depends Build {
 
     $env:PSModulePath = $origModulePath
 
+    Remove-Item -Path $testResultsXml -Force
+
 } -description 'Run Pester tests'
 
 task CreateMarkdownHelp {

@@ -49,6 +49,11 @@ function Get-FolderSize {
     
     Example: C:\users\you\desktop\output.csv
 
+    .PARAMETER AddFileTotals
+
+    This parameter allows you to add file totals to the results. 
+    Note: This will reduce performance of the script by around 30%!
+
     .EXAMPLE 
 
     Get-FolderSize | Format-Table -AutoSize
@@ -128,6 +133,23 @@ function Get-FolderSize {
     Omit folder(s) from being included 
     Get-FolderSize.ps1 -OmitFolders 'C:\Temp','C:\Windows'
 
+    .EXAMPLE
+
+    Add file counts for each folder
+    Note: This will slow down the execution of the script by around 30%
+    
+    $results = Get-FolderSize -AddFileTotal
+
+    PS /Users/ninja/Documents/repos/PSFolderSize> $results[0] | Format-List *
+
+    FolderName  : .git
+    Size(Bytes) : 228591
+    Size(MB)    : 0.22
+    Size(GB)    : 0.00
+    FullPath    : /Users/ninja/Documents/repos/PSFolderSize/.git
+    HostName    : njambp.local
+    FileCount   : 382
+
     #>
     [cmdletbinding(
         DefaultParameterSetName = 'default'
@@ -162,6 +184,12 @@ function Get-FolderSize {
         )]
         [Switch]
         $AddTotal,
+
+        [Parameter(
+            ParameterSetName = 'default'
+        )]
+        [Switch]
+        $AddFileTotals,        
 
         [Parameter(
             ParameterSetName = 'default'
@@ -236,12 +264,10 @@ function Get-FolderSize {
 
             $folderInfo = Get-Childitem -LiteralPath $fullPath -Recurse -Force -ErrorAction SilentlyContinue 
             $folderSize = $folderInfo | Measure-Object -Property Length -Sum -ErrorAction SilentlyContinue       
-            $totalFiles = ($folderInfo | Where-Object {!$_.PSIsContainer}).Count
             #We use the string format operator here to show only 2 decimals, and do some PS Math.
             $folderSizeInBytes = $folderSize.Sum
             $folderSizeInMB    = "{0:N2}" -f ($folderSize.Sum / 1MB)
             $folderSizeInGB    = "{0:N2}" -f ($folderSize.Sum / 1GB)
-            
 
         }
         
@@ -253,11 +279,18 @@ function Get-FolderSize {
             'Size(Bytes)' = $folderSizeInBytes
             'Size(MB)'    = $folderSizeInMB
             'Size(GB)'    = $folderSizeInGB
-            FileCount     = $totalFiles
             FullPath      = $fullPath            
             HostName      = $hostName
 
         }                        
+
+        #Add file totals if switch is true
+        if ($AddFileTotals) {
+
+            $totalFiles = ($folderInfo | Where-Object {!$_.PSIsContainer}).Count
+            $folderObject | Add-Member -MemberType NoteProperty -Name FileCount -Value $totalFiles
+
+        }
 
         #Add the object to the array
         $folderList.Add($folderObject) | Out-Null
@@ -277,12 +310,6 @@ function Get-FolderSize {
 
             }
 
-            $folderList | ForEach-Object {
-
-                $grandTotalFiles += $_.FileCount   
-
-            }
-
             $totalFolderSizeInMB = "{0:N2}" -f ($grandTotal / 1MB)
             $totalFolderSizeInGB = "{0:N2}" -f ($grandTotal / 1GB)
 
@@ -292,16 +319,28 @@ function Get-FolderSize {
                 'Size(Bytes)' = $grandTotal
                 'Size(MB)'    = $totalFolderSizeInMB
                 'Size(GB)'    = $totalFolderSizeInGB
-                FileCount     = $grandTotalFiles
                 FullPath      = 'N/A'                
                 HostName      = $hostName
 
             }
 
+            if ($AddFileTotals) {
+
+                $folderList | ForEach-Object {
+
+                    $grandTotalFiles += $_.FileCount   
+    
+                }
+
+                $folderObject  | 
+                    Add-Member -MemberType NoteProperty -Name FileCount -Value $grandTotalFiles
+
+            }
+
             #Add the object to the array
             $folderList.Add($folderObject) | Out-Null
-        }   
 
+        }   
     }
     
     if ($Output -or $OutputFile) {

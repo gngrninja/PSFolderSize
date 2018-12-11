@@ -17,7 +17,8 @@ You can change the base path, omit folders, as well as output results in various
 ### default (Default)
 ```
 Get-FolderSize [[-BasePath] <String[]>] [-FolderName <String[]>] [-OmitFolders <String[]>] [-AddTotal]
- [-UseRobo] [-Output <String>] [-OutputPath <String>] [-OutputFile <String>] [<CommonParameters>]
+ [-AddFileTotals] [-UseRobo] [-Output <String>] [-OutputPath <String>] [-OutputFile <String>]
+ [<CommonParameters>]
 ```
 
 ### outputWithType
@@ -119,6 +120,25 @@ Omit folder(s) from being included
 
 Get-FolderSize.ps1 -OmitFolders 'C:\Temp','C:\Windows'
 
+### EXAMPLE 8
+```
+Add file counts for each folder
+```
+
+Note: This will slow down the execution of the script by around 30%
+
+$results = Get-FolderSize -AddFileTotal
+
+PS /Users/ninja/Documents/repos/PSFolderSize\> $results\[0\] | Format-List *
+
+FolderName  : .git
+Size(Bytes) : 228591
+Size(MB)    : 0.22
+Size(GB)    : 0.00
+FullPath    : /Users/ninja/Documents/repos/PSFolderSize/.git
+HostName    : njambp.local
+FileCount   : 382
+
 ## PARAMETERS
 
 ### -BasePath
@@ -169,6 +189,22 @@ Accept wildcard characters: False
 
 ### -AddTotal
 This parameter adds a total count at the end of the array
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: default
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -AddFileTotals
+This parameter allows you to add file totals to the results. 
+Note: This will reduce performance of the script by around 30%!
 
 ```yaml
 Type: SwitchParameter
