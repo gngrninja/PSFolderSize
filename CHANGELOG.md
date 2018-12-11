@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased] 
+## [Unreleased]
 
 ### Adding
 - Ability to use wildcards if looking for files
@@ -14,6 +14,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changing
 - Adding tests/official support for Get-FileReport
+
+## [1.6.6] 2018-12-10
+### Changed
+- Adding file counts are now optional. You can add them to the results by adding the -AddFileTotals switch.
+  - This will reduce performance of the script (by around 30%), until I can find a better way to calculate file totals!
 
 ## [1.6.5] 2018-12-10
 ### Added
@@ -27,7 +32,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - Changed -Path to -LiteralPath so []'s aren't interpreted as wild cards
-  
+
 ## [1.6.2] 2018-10-21
 ### Fixed
 
@@ -42,6 +47,6 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Added file listing under root search folder
     - The files will show up under FolderName until I figure out a better approach for this. This was added for a better GrandTotal amount when files were in the root of a folder listed.
 - Added more documentation
-  
+
 ### Changed
 - Folder structure in repo, added build + tests
