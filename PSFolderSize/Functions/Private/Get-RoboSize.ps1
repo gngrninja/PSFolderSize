@@ -3,19 +3,19 @@ function Get-RoboSize {
     param(
         [Parameter(
             Position = 0,
-            Mandatory
+            Mandatory = $true
         )]
         [string]
         $Path,
 
         [Parameter(
-
+        Mandatory = $false
         )]
         [int]
         $DecimalPrecision = 2,
 
         [Parameter(
-
+        Mandatory = $false
         )]
         [int]
         $Threads = 16
