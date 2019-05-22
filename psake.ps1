@@ -7,13 +7,11 @@ properties {
         $projectRoot = $PSScriptRoot
 
     }
-
-    $sut             = $env:BHModulePath
+    
     $tests           = "$projectRoot/tests"
     $outputDir       = Join-Path -Path $projectRoot -ChildPath 'out'
     $outputModDir    = Join-Path -Path $outputDir -ChildPath $env:BHProjectName
-    $manifest        = Import-PowerShellDataFile -Path $env:BHPSModuleManifest
-    $outputModVerDir = Join-Path -Path $outputModDir -ChildPath $manifest.ModuleVersion
+    $manifest        = Import-PowerShellDataFile -Path $env:BHPSModuleManifest    
     $psVersion       = $PSVersionTable.PSVersion.Major
     $pathSeperator   = [IO.Path]::PathSeparator
     $dirSeperator    = [IO.Path]::DirectorySeparatorChar

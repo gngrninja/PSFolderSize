@@ -256,18 +256,18 @@ function Get-FolderSize {
         if ($UseRobo) {
 
             $folderSize        = Get-RoboSize -Path $fullPath -DecimalPrecision 2
-            $folderSizeInBytes = $folderSize.TotalBytes
-            $folderSizeInMB    = $folderSize.TotalMB
-            $folderSizeInGB    = $folderSize.TotalGB
+            [double]$folderSizeInBytes = $folderSize.TotalBytes
+            [double]$folderSizeInMB    = $folderSize.TotalMB
+            [double]$folderSizeInGB    = $folderSize.TotalGB
 
         } else {
 
             $folderInfo = Get-Childitem -LiteralPath $fullPath -Recurse -Force -ErrorAction SilentlyContinue 
             $folderSize = $folderInfo | Measure-Object -Property Length -Sum -ErrorAction SilentlyContinue       
             #We use the string format operator here to show only 2 decimals, and do some PS Math.
-            $folderSizeInBytes = $folderSize.Sum
-            $folderSizeInMB    = "{0:N2}" -f ($folderSize.Sum / 1MB)
-            $folderSizeInGB    = "{0:N2}" -f ($folderSize.Sum / 1GB)
+            [double]$folderSizeInBytes = $folderSize.Sum
+            [double]$folderSizeInMB    = "{0:N2}" -f ($folderSize.Sum / 1MB)
+            [double]$folderSizeInGB    = "{0:N2}" -f ($folderSize.Sum / 1GB)
 
         }
         
@@ -306,12 +306,12 @@ function Get-FolderSize {
         
             $folderList | ForEach-Object {
 
-                $grandTotal += $_.'Size(Bytes)'    
+                [double]$grandTotal += $_.'Size(Bytes)'    
 
             }
 
-            $totalFolderSizeInMB = "{0:N2}" -f ($grandTotal / 1MB)
-            $totalFolderSizeInGB = "{0:N2}" -f ($grandTotal / 1GB)
+            [double]$totalFolderSizeInMB = "{0:N2}" -f ($grandTotal / 1MB)
+            [double]$totalFolderSizeInGB = "{0:N2}" -f ($grandTotal / 1GB)
 
             $folderObject = [PSCustomObject]@{
 

@@ -15,6 +15,14 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changing
 - Adding tests/official support for Get-FileReport
 
+## [1.6.7] 2019-05-22
+### Changed
+- Results are now of type double, not string (for MB/GB/Byte count)
+- Support for v3.0 of PowerShell, as a lot of folks that use this needed it
+
+### Added
+- Initial support for using Robocopy added, only for folders, with the -UseRobo switch
+
 ## [1.6.6] 2018-12-10
 ### Changed
 - Adding file counts are now optional. You can add them to the results by adding the -AddFileTotals switch.
