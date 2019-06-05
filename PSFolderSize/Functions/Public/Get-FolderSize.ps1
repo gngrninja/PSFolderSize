@@ -256,19 +256,24 @@ function Get-FolderSize {
         if ($UseRobo) {
 
             $folderSize        = Get-RoboSize -Path $fullPath -DecimalPrecision 2
-            [double]$folderSizeInBytes = $folderSize.TotalBytes
-            [double]$folderSizeInMB    = $folderSize.TotalMB
-            [double]$folderSizeInGB    = $folderSize.TotalGB
+
+            $folderSizeInBytes = $folderSize.TotalBytes
+            $folderSizeInMB    = [math]::Round($folderSize.TotalMB, 2)
+            $folderSizeInGB    = [math]::Round($folderSize.TotalGB, 2)
 
         } else {
 
             $folderInfo = Get-Childitem -LiteralPath $fullPath -Recurse -Force -ErrorAction SilentlyContinue 
             $folderSize = $folderInfo | Measure-Object -Property Length -Sum -ErrorAction SilentlyContinue       
-            #We use the string format operator here to show only 2 decimals, and do some PS Math.
-            [double]$folderSizeInBytes = $folderSize.Sum
-            [double]$folderSizeInMB    = "{0:N2}" -f ($folderSize.Sum / 1MB)
-            [double]$folderSizeInGB    = "{0:N2}" -f ($folderSize.Sum / 1GB)
 
+            #We use the string format operator here to show only 2 decimals, and do some PS Math.            
+            if ($folderSize.Sum) {
+
+                $folderSizeInBytes = $folderSize.Sum
+                $folderSizeInMB    = [math]::Round($folderSize.Sum / 1MB, 2)
+                $folderSizeInGB    = [math]::Round($folderSize.Sum / 1GB, 2)
+
+            }
         }
         
         #Here we create a custom object that we'll add to the array
@@ -305,13 +310,16 @@ function Get-FolderSize {
         if ($folderList.Count -gt 1) {
         
             $folderList | ForEach-Object {
+                
+                if ($_.'Size(Bytes)' -gt 0) {
 
-                [double]$grandTotal += $_.'Size(Bytes)'    
+                    $grandTotal += $_.'Size(Bytes)'
 
+                }                  
             }
 
-            [double]$totalFolderSizeInMB = "{0:N2}" -f ($grandTotal / 1MB)
-            [double]$totalFolderSizeInGB = "{0:N2}" -f ($grandTotal / 1GB)
+            $totalFolderSizeInMB = [math]::Round($grandTotal / 1MB, 2)
+            $totalFolderSizeInGB = [math]::Round($grandTotal / 1GB, 2)
 
             $folderObject = [PSCustomObject]@{
 
