@@ -15,6 +15,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changing
 - Adding tests/official support for Get-FileReport
 
+## [1.6.8] 2019-06-05
+### Fixed
+- Number formatting for de-DE culture should now work properly
+
 ## [1.6.7] 2019-05-22
 ### Changed
 - Results are now of type double, not string (for MB/GB/Byte count)
