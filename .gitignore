@@ -4,3 +4,4 @@
 .DS_Store
 /tests/artifacts/*xml
 /site
+/docs
