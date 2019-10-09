@@ -25,7 +25,20 @@ function Get-RoboSize {
 
         Write-Verbose -Message "Using robocopy to get size of path -> [$Path]"
 
-        $args = @("/L","/S","/NJH","/BYTES","/FP","/NC","/NDL","/TS","/XJ","/R:0","/W:0","/MT:$Threads")
+        $args = @(
+            "/L",
+            "/S",
+            "/NJH",
+            "/BYTES",
+            "/FP",
+            "/NC",
+            "/NDL",
+            "/TS",
+            "/XJ",
+            "/R:0",
+            "/W:0",
+            "/MT:$Threads"
+        )
 
         [DateTime]$startTime = [DateTime]::Now
 
@@ -41,13 +54,14 @@ function Get-RoboSize {
 
         Write-Verbose "Raw summary:"
         Write-Verbose ($summary | Out-String)
+
         $expectedSummary = "$headerRegex\s+$dirRegex\s+$fileRegex\s+$byteRegex\s+$timeRegex\s+$endRegex"
         if ($summary -match $expectedSummary) {
 
             $roboObject = [PSCustomObject]@{
                 
                 Path        = $Path
-                TotalBytes  = [decimal] $Matches['ByteCount']
+                TotalBytes  = [decimal]$Matches['ByteCount']
                 TotalMB     = [math]::Round(([decimal] $Matches['ByteCount'] / 1MB), $DecimalPrecision)
                 TotalGB     = [math]::Round(([decimal] $Matches['ByteCount'] / 1GB), $DecimalPrecision)
                 TimeElapsed = [math]::Round([decimal] ($endTime - $startTime).TotalSeconds, $DecimalPrecision)

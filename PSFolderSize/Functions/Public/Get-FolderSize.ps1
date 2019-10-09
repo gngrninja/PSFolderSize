@@ -9,7 +9,7 @@ function Get-FolderSize {
     .DESCRIPTION
 
     This function will get the folder size in MB and GB of folders found in the basePath parameter. 
-    The basePath parameter defaults to C:\Users. You can also specify a specific folder name via the folderName parameter.
+    The BasePath parameter defaults to the current directory.
 
     .PARAMETER BasePath
 
@@ -30,28 +30,28 @@ function Get-FolderSize {
 
     .PARAMETER Output
 
-    Use this option to output the results. Valid options are csv, xml, or json.
+    Use this option to output the results. Valid options are csv, xml, or json
 
     .PARAMETER OutputPath
 
-    Specify the path you want to use when outputting the results as a csv, xml, or json file.
+    Specify the path you want to use when outputting the results as a csv, xml, or json file
 
-    Do not include a trailing slash.
+    Do not include a trailing slash
 
     Example: C:\users\you\Desktop
 
     Defaults to (Get-Location)
-    This will be where you called the module from.
+    This will be where you called the module from
 
     .PARAMETER OutputFile
 
-    This allows you to specify the path and file name you'd like for output.
+    This allows you to specify the path and file name you'd like for output
     
     Example: C:\users\you\desktop\output.csv
 
     .PARAMETER AddFileTotals
 
-    This parameter allows you to add file totals to the results. 
+    This parameter allows you to add file totals to the results
     Note: This will reduce performance of the script by around 30%!
 
     .EXAMPLE 
@@ -223,113 +223,123 @@ function Get-FolderSize {
         $OutputFile = [string]::Empty
     )
 
-    #Get a list of all the directories in the base path we're looking for.
-    $allFolders = Get-FolderList -FolderName $FolderName -OmitFolders $OmitFolders -BasePath $BasePath
-    
-    #Create array to store folder objects found with size info.
-    [System.Collections.ArrayList]$folderList = @()
+    begin {
 
-    #Get hostname
-    $hostName = [System.Net.Dns]::GetHostByName((hostname)).HostName
-
-    #Go through each folder in the base path.
-    ForEach ($folder in $allFolders) {
-
-        #Clear out the variables used in the loop.
-        $fullPath          = $null
-        $folderInfo        = $null        
-        $folderObject      = $null
-        $folderSize        = $null
-        $folderSizeInBytes = $null
-        $folderSizeInMB    = $null
-        $folderSizeInGB    = $null
-        $folderBaseName    = $null
-        $totalFiles        = $null
-
-        #Store the full path to the folder and its name in separate variables
-        $fullPath       = $folder.FullName
-        $folderBaseName = $folder.BaseName     
-
-        Write-Verbose "Working with [$fullPath]..."            
-
-        #Get folder info / sizes
-        if ($UseRobo) {
-
-            $folderSize        = Get-RoboSize -Path $fullPath -DecimalPrecision 2
-
-            $folderSizeInBytes = $folderSize.TotalBytes
-            $folderSizeInMB    = [math]::Round($folderSize.TotalMB, 2)
-            $folderSizeInGB    = [math]::Round($folderSize.TotalGB, 2)
-
-        } else {
-
-            $folderInfo = Get-Childitem -LiteralPath $fullPath -Recurse -Force -ErrorAction SilentlyContinue 
-            $folderSize = $folderInfo | Measure-Object -Property Length -Sum -ErrorAction SilentlyContinue       
-
-            #We use the string format operator here to show only 2 decimals, and do some PS Math.            
-            if ($folderSize.Sum) {
-
-                $folderSizeInBytes = $folderSize.Sum
-                $folderSizeInMB    = [math]::Round($folderSize.Sum / 1MB, 2)
-                $folderSizeInGB    = [math]::Round($folderSize.Sum / 1GB, 2)
-
-            }
-        }
+        #Get a list of all the directories in the base path we're looking for.
+        $allFolders = Get-FolderList -FolderName $FolderName -OmitFolders $OmitFolders -BasePath $BasePath
         
-        #Here we create a custom object that we'll add to the array
-        $folderObject = [PSCustomObject]@{
+        #Create array to store folder objects found with size info.
+        [System.Collections.ArrayList]$folderList = @()
 
-            PSTypeName    = 'PS.Folder.List.Result'
-            FolderName    = $folderBaseName
-            'Size(Bytes)' = $folderSizeInBytes
-            'Size(MB)'    = $folderSizeInMB
-            'Size(GB)'    = $folderSizeInGB
-            FullPath      = $fullPath            
-            HostName      = $hostName
-
-        }                        
-
-        #Add file totals if switch is true
-        if ($AddFileTotals) {
-
-            $totalFiles = ($folderInfo | Where-Object {!$_.PSIsContainer}).Count
-            $folderObject | Add-Member -MemberType NoteProperty -Name FileCount -Value $totalFiles
-
-        }
-
-        #Add the object to the array
-        $folderList.Add($folderObject) | Out-Null
-
+        #Get hostname
+        $hostName = [System.Net.Dns]::GetHostByName((hostname)).HostName
+        
     }
 
-    if ($AddTotal) {
+    process  {
 
-        $grandTotal      = $null
-        $grandTotalFiles = $null
+        #Go through each folder in the base path.
+        $allFolders | ForEach-Object {
 
-        if ($folderList.Count -gt 1) {
-        
-            $folderList | ForEach-Object {
-                
-                if ($_.'Size(Bytes)' -gt 0) {
+            #Clear out the variables used in the loop.
+            $folder            = $null
+            $fullPath          = $null
+            $folderInfo        = $null        
+            $folderObject      = $null
+            $folderSize        = $null
+            $folderSizeInBytes = $null
+            $folderSizeInMB    = $null
+            $folderSizeInGB    = $null
+            $folderBaseName    = $null
+            $totalFiles        = $null
 
-                    $grandTotal += $_.'Size(Bytes)'
+            $folder = $_
 
-                }                  
+            #Store the full path to the folder and its name in separate variables
+            $fullPath       = $folder.FullName
+            $folderBaseName = $folder.BaseName     
+
+            Write-Verbose "Working with [$fullPath]..."            
+
+            #Get folder info / sizes
+            if ($UseRobo) {
+
+                $folderSize        = Get-RoboSize -Path $fullPath -DecimalPrecision 2
+
+                $folderSizeInBytes = $folderSize.TotalBytes
+                $folderSizeInMB    = [math]::Round($folderSize.TotalMB, 2)
+                $folderSizeInGB    = [math]::Round($folderSize.TotalGB, 2)
+
+            } else {
+
+                $folderInfo = Get-Childitem -LiteralPath $fullPath -Recurse -Force -ErrorAction SilentlyContinue 
+                $folderSize = $folderInfo | Measure-Object -Property Length -Sum -ErrorAction SilentlyContinue       
+
+                #We use the string format operator here to show only 2 decimals, and do some PS Math.            
+                if ($folderSize.Sum) {
+
+                    $folderSizeInBytes = $folderSize.Sum
+                    $folderSizeInMB    = [math]::Round($folderSize.Sum / 1MB, 2)
+                    $folderSizeInGB    = [math]::Round($folderSize.Sum / 1GB, 2)
+
+                }
             }
 
-            $totalFolderSizeInMB = [math]::Round($grandTotal / 1MB, 2)
-            $totalFolderSizeInGB = [math]::Round($grandTotal / 1GB, 2)
-
+            #Here we create a custom object that we'll add to the array
             $folderObject = [PSCustomObject]@{
 
-                FolderName    = "GrandTotal for [$BasePath]"
-                'Size(Bytes)' = $grandTotal
-                'Size(MB)'    = $totalFolderSizeInMB
-                'Size(GB)'    = $totalFolderSizeInGB
-                FullPath      = 'N/A'                
+                PSTypeName    = 'PS.Folder.List.Result'
+                FolderName    = $folderBaseName
+                'Size(Bytes)' = $folderSizeInBytes
+                'Size(MB)'    = $folderSizeInMB
+                'Size(GB)'    = $folderSizeInGB
+                FullPath      = $fullPath            
                 HostName      = $hostName
 
+            }                        
+
+            #Add file totals if switch is true
+            if ($AddFileTotals) {
+
+                $totalFiles = ($folderInfo | Where-Object {!$_.PSIsContainer}).Count
+                $folderObject | Add-Member -MemberType NoteProperty -Name FileCount -Value $totalFiles
+
+            }
+
+            #Add the object to the array
+            $folderList.Add($folderObject) | Out-Null
+
+            }
+
+        if ($AddTotal) {
+
+            $grandTotal      = $null
+            $grandTotalFiles = $null
+
+            if ($folderList.Count -gt 1) {
+
+                $folderList | ForEach-Object {
+                    
+                    if ($_.'Size(Bytes)' -gt 0) {
+
+                        $grandTotal += $_.'Size(Bytes)'
+
+                    }                  
+                }
+
+                $totalFolderSizeInMB = [math]::Round($grandTotal / 1MB, 2)
+                $totalFolderSizeInGB = [math]::Round($grandTotal / 1GB, 2)
+
+                $folderObject = [PSCustomObject]@{
+
+                    FolderName    = "GrandTotal for [$BasePath]"
+                    'Size(Bytes)' = $grandTotal
+                    'Size(MB)'    = $totalFolderSizeInMB
+                    'Size(GB)'    = $totalFolderSizeInGB
+                    FullPath      = 'N/A'                
+                    HostName      = $hostName
+
+                }
             }
 
             if ($AddFileTotals) {
@@ -337,7 +347,7 @@ function Get-FolderSize {
                 $folderList | ForEach-Object {
 
                     $grandTotalFiles += $_.FileCount   
-    
+
                 }
 
                 $folderObject  | 
@@ -351,58 +361,61 @@ function Get-FolderSize {
         }   
     }
     
-    if ($Output -or $OutputFile) {
+    end {
 
-        if (!$OutputFile) {
+        if ($Output -or $OutputFile) {
 
-            $fileName = "{2}\{0:MMddyy_HHmm}.{1}" -f (Get-Date), $Output, $OutputPath
-
-        } else {
-
-            $fileName = $OutputFile
-            $Output   = $fileName.Substring($fileName.LastIndexOf('.') + 1) 
-
-
-        }
-       
-        Write-Verbose "Attempting to export results to -> [$fileName]!"
-
-        try {
-
-            switch ($Output) {
-
-                'csv' {
+            if (!$OutputFile) {
     
-                    $folderList | Sort-Object 'Size(Bytes)' -Descending | Export-Csv -Path $fileName -NoTypeInformation -Force
+                $fileName = "{2}\{0:MMddyy_HHmm}.{1}" -f (Get-Date), $Output, $OutputPath
     
-                }
+            } else {
     
-                'xml' {
+                $fileName = $OutputFile
+                $Output   = $fileName.Substring($fileName.LastIndexOf('.') + 1) 
     
-                    $folderList | Sort-Object 'Size(Bytes)' -Descending | Export-Clixml -Path $fileName
     
-                }
+            }
+           
+            Write-Verbose "Attempting to export results to -> [$fileName]!"
     
-                'json' {
+            try {
     
-                    $folderList | Sort-Object 'Size(Bytes)' -Descending | ConvertTo-Json | Out-File -FilePath $fileName -Force
+                switch ($Output) {
     
-                }
-    
+                    'csv' {
+        
+                        $folderList | Sort-Object 'Size(Bytes)' -Descending | Export-Csv -Path $fileName -NoTypeInformation -Force
+        
+                    }
+        
+                    'xml' {
+        
+                        $folderList | Sort-Object 'Size(Bytes)' -Descending | Export-Clixml -Path $fileName
+        
+                    }
+        
+                    'json' {
+        
+                        $folderList | Sort-Object 'Size(Bytes)' -Descending | ConvertTo-Json | Out-File -FilePath $fileName -Force
+        
+                    }
+        
+                } 
             } 
-        } 
-
-        catch {
-
-            $errorMessage = $_.Exception.Message
-
-            Write-Error "Error exporting file to [$fileName] -> [$errorMessage]!"
-
+    
+            catch {
+    
+                $errorMessage = $_.Exception.Message
+    
+                Write-Error "Error exporting file to [$fileName] -> [$errorMessage]!"
+    
+            }
+          
         }
-      
-    }
+    
+        #Return the object array with the objects selected in the order specified
+        Return $folderList | Sort-Object 'Size(Bytes)' -Descending
 
-    #Return the object array with the objects selected in the order specified.
-    Return $folderList | Sort-Object 'Size(Bytes)' -Descending
-
+    }    
 }
