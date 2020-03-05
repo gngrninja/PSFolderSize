@@ -15,6 +15,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changing
 - Adding tests/official support for Get-FileReport
 
+## [1.6.9] 2020-03-05
+### Added
+- Added size in KB to results
+
 ## [1.6.8] 2019-06-05
 ### Fixed
 - Number formatting for de-DE culture should now work properly

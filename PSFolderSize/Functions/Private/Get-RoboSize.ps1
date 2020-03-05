@@ -62,6 +62,7 @@ function Get-RoboSize {
                 
                 Path        = $Path
                 TotalBytes  = [decimal]$Matches['ByteCount']
+                TotalKB     = [math]::Round(([decimal] $Matches['ByteCount'] / 1KB), $DecimalPrecision)
                 TotalMB     = [math]::Round(([decimal] $Matches['ByteCount'] / 1MB), $DecimalPrecision)
                 TotalGB     = [math]::Round(([decimal] $Matches['ByteCount'] / 1GB), $DecimalPrecision)
                 TimeElapsed = [math]::Round([decimal] ($endTime - $startTime).TotalSeconds, $DecimalPrecision)

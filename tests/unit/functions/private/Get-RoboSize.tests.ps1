@@ -13,7 +13,8 @@ InModuleScope PSFolderSize {
                 $folderSize = Get-RoboSize -Path $resolvedPath
 
                 $folderSize.TotalBytes | Should Be 98
-                $folderSize.TotalMB    | Should Not Be $null
+                $folderSize.TotalKB    | Should Not Be $null
+                $folderSize.TotalMB    | Should Not Be $null                
                 $folderSize.TotalGB    | Should Not Be $null
 
             }

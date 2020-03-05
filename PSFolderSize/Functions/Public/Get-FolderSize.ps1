@@ -267,6 +267,7 @@ function Get-FolderSize {
                 $folderSize        = Get-RoboSize -Path $fullPath -DecimalPrecision 2
 
                 $folderSizeInBytes = $folderSize.TotalBytes
+                $folderSizeInKB    = [math]::Round($folderSize.TotalKB, 2)
                 $folderSizeInMB    = [math]::Round($folderSize.TotalMB, 2)
                 $folderSizeInGB    = [math]::Round($folderSize.TotalGB, 2)
 
@@ -279,6 +280,7 @@ function Get-FolderSize {
                 if ($folderSize.Sum) {
 
                     $folderSizeInBytes = $folderSize.Sum
+                    $folderSizeInKB    = [math]::Round($folderSize.Sum / 1KB, 2)
                     $folderSizeInMB    = [math]::Round($folderSize.Sum / 1MB, 2)
                     $folderSizeInGB    = [math]::Round($folderSize.Sum / 1GB, 2)
 
@@ -291,6 +293,7 @@ function Get-FolderSize {
                 PSTypeName    = 'PS.Folder.List.Result'
                 FolderName    = $folderBaseName
                 'Size(Bytes)' = $folderSizeInBytes
+                'Size(KB)'    = $folderSizeInKB               
                 'Size(MB)'    = $folderSizeInMB
                 'Size(GB)'    = $folderSizeInGB
                 FullPath      = $fullPath            
@@ -327,6 +330,7 @@ function Get-FolderSize {
                     }                  
                 }
 
+                $totalFolderSizeInKB = [math]::Round($grandTotal / 1KB, 2)
                 $totalFolderSizeInMB = [math]::Round($grandTotal / 1MB, 2)
                 $totalFolderSizeInGB = [math]::Round($grandTotal / 1GB, 2)
 
@@ -334,6 +338,7 @@ function Get-FolderSize {
 
                     FolderName    = "GrandTotal for [$BasePath]"
                     'Size(Bytes)' = $grandTotal
+                    'Size(KB)'    = $totalFolderSizeInKB
                     'Size(MB)'    = $totalFolderSizeInMB
                     'Size(GB)'    = $totalFolderSizeInGB
                     FullPath      = 'N/A'                

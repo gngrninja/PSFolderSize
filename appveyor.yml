@@ -5,7 +5,7 @@ environment:
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
       PowerShellEdition: WindowsPowerShell
   snowflake:
-    secure: hwdG7JCG0zY1bZ2wfCFoNBdXsWKBEfT+DDnTMi5IzKxDp/6uj1taMBEkynRlCzX0
+    secure: 2/KrmaMSE+h1uoCEQ5oU9yPpghEd3MhsqaN+Yzoinwga9PLaXXh1cGMHklEzcJ7H
 
 clone_folder: c:\projects\PSFolderSize
 
