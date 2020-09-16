@@ -1,9 +1,7 @@
 environment:
   matrix:
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-      PowerShellEdition: PowerShellCore
-    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-      PowerShellEdition: WindowsPowerShell
+      PowerShellEdition: PowerShellCore    
   snowflake:
     secure: 2/KrmaMSE+h1uoCEQ5oU9yPpghEd3MhsqaN+Yzoinwga9PLaXXh1cGMHklEzcJ7H
 
@@ -16,5 +14,5 @@ build: off
 
 #Kick off the CI/CD pipeline
 test_script: 
-  - ps:   if ($env:PowerShellEdition -eq 'WindowsPowerShell') { . .\build.ps1 -Task Test -UpdateModules } 
-  - pwsh: if ($env:PowerShellEdition -eq 'PowerShellCore')    { . .\build.ps1 -Task Publish -UpdateModules }
+  - ps:   if ($env:PowerShellEdition -eq 'WindowsPowerShell') { . .\build.ps1 -Task Test} 
+  - pwsh: if ($env:PowerShellEdition -eq 'PowerShellCore')    { . .\build.ps1 -Task Publish}
