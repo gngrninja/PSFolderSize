@@ -15,6 +15,16 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changing
 - Adding tests/official support for Get-FileReport
 
+## [1.7] 2020-09-16
+### Changed
+- Changed results to display as Bytes, SizeKB, SizeMB, and SizeGB.
+  (was Size(KB), Size(MB), and Size(GB))
+### Added  
+- Added the ability to pre-sort output when using the -OutputFile parameter via the new parameter -OutputSort
+  (supported options are FolderSize and SizeBytes)
+### Fixed
+- Fixed up unit tests so they work with Pester v5
+
 ## [1.6.9] 2020-03-05
 ### Added
 - Added size in KB to results

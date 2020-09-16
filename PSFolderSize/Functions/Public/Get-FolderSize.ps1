@@ -49,6 +49,12 @@ function Get-FolderSize {
     
     Example: C:\users\you\desktop\output.csv
 
+    .PARAMETER OutputSort
+
+    This allows you to specify what you'd like to sort by for the csv/json/xml output. 
+
+    Valid options are FolderSize and SizeBytes
+
     .PARAMETER AddFileTotals
 
     This parameter allows you to add file totals to the results
@@ -59,7 +65,7 @@ function Get-FolderSize {
     Get-FolderSize | Format-Table -AutoSize
 
 
-    FolderName                Size(Bytes) Size(MB)     Size(GB)
+    FolderName                SizeBytes SizeMB     SizeGB
    
     $GetCurrent                    193768 0.18 MB      0.00 GB
     $RECYCLE.BIN                 20649823 19.69 MB     0.02 GB
@@ -73,7 +79,7 @@ function Get-FolderSize {
     Get-FolderSize -BasePath 'C:\Program Files'
     
 
-    FolderName                                   Size(Bytes) Size(MB)    Size(GB)
+    FolderName                                   SizeBytes SizeMB    SizeGB
 
     7-Zip                                            4588532 4.38 MB     0.00 GB
     Adobe                                         3567833029 3,402.55 MB 3.32 GB
@@ -86,7 +92,7 @@ function Get-FolderSize {
     Get-FolderSize -BasePath 'C:\Program Files' -FolderName IIS
 
 
-    FolderName Size(Bytes) Size(MB) Size(GB)
+    FolderName SizeBytes SizeMB SizeGB
   
     IIS            5480411 5.23 MB  0.01 GB
 
@@ -96,7 +102,7 @@ function Get-FolderSize {
     $getFolderSize | Format-Table -AutoSize
 
 
-    FolderName Size(GB) Size(MB)
+    FolderName SizeGB SizeMB
   
     Public     0.00 GB  0.00 MB
     thegn      2.39 GB  2,442.99 MB
@@ -107,7 +113,7 @@ function Get-FolderSize {
     $getFolderSize 
   
 
-    FolderName Size(GB) Size(MB)
+    FolderName SizeGB SizeMB
     
     Public     0.00 GB  0.00 MB
     thegn      2.39 GB  2,442.99 MB
@@ -117,11 +123,11 @@ function Get-FolderSize {
     .EXAMPLE
 
     Sort by size descending 
-    $getFolderSize = Get-FolderSize | Sort-Object 'Size(Bytes)' -Descending
+    $getFolderSize = Get-FolderSize | Sort-Object SizeBytes -Descending
     $getFolderSize 
 
 
-    FolderName                Size(Bytes) Size(MB)     Size(GB)
+    FolderName                SizeBytes SizeMB     SizeGB
 
     Users                     76280394429 72,746.65 MB 71.04 GB
     Games                     48522184491 46,274.36 MB 45.19 GB
@@ -143,9 +149,9 @@ function Get-FolderSize {
     PS /Users/ninja/Documents/repos/PSFolderSize> $results[0] | Format-List *
 
     FolderName  : .git
-    Size(Bytes) : 228591
-    Size(MB)    : 0.22
-    Size(GB)    : 0.00
+    SizeBytes   : 228591
+    SizeMB      : 0.22
+    SizeGB      : 0.00
     FullPath    : /Users/ninja/Documents/repos/PSFolderSize/.git
     HostName    : njambp.local
     FileCount   : 382
@@ -215,6 +221,16 @@ function Get-FolderSize {
         )]
         [String]
         $OutputPath = (Get-Location),
+
+        [Parameter(
+            ParameterSetName = 'default'
+        )]
+        [Parameter(
+            ParameterSetName = 'outputWithType'
+        )]
+        [ValidateSet('FolderName','SizeBytes')]
+        [String]
+        $OutputSort,
 
         [Parameter(
             ParameterSetName = 'default'
@@ -292,10 +308,10 @@ function Get-FolderSize {
 
                 PSTypeName    = 'PS.Folder.List.Result'
                 FolderName    = $folderBaseName
-                'Size(Bytes)' = $folderSizeInBytes
-                'Size(KB)'    = $folderSizeInKB               
-                'Size(MB)'    = $folderSizeInMB
-                'Size(GB)'    = $folderSizeInGB
+                SizeBytes     = $folderSizeInBytes
+                SizeKB        = $folderSizeInKB               
+                SizeMB        = $folderSizeInMB
+                SizeGB        = $folderSizeInGB
                 FullPath      = $fullPath            
                 HostName      = $hostName
 
@@ -337,10 +353,10 @@ function Get-FolderSize {
                 $folderObject = [PSCustomObject]@{
 
                     FolderName    = "GrandTotal for [$BasePath]"
-                    'Size(Bytes)' = $grandTotal
-                    'Size(KB)'    = $totalFolderSizeInKB
-                    'Size(MB)'    = $totalFolderSizeInMB
-                    'Size(GB)'    = $totalFolderSizeInGB
+                    SizeBytes     = $grandTotal
+                    SizeKB        = $totalFolderSizeInKB
+                    SizeMB        = $totalFolderSizeInMB
+                    SizeGB        = $totalFolderSizeInGB
                     FullPath      = 'N/A'                
                     HostName      = $hostName
 
@@ -387,22 +403,22 @@ function Get-FolderSize {
             try {
     
                 switch ($Output) {
-    
+                    
                     'csv' {
         
-                        $folderList | Sort-Object 'Size(Bytes)' -Descending | Export-Csv -Path $fileName -NoTypeInformation -Force
+                        $folderList | Sort-Object $OutputSort -Descending | Export-Csv -Path $fileName -NoTypeInformation -Force
         
                     }
         
                     'xml' {
         
-                        $folderList | Sort-Object 'Size(Bytes)' -Descending | Export-Clixml -Path $fileName
+                        $folderList | Sort-Object $OutputSort -Descending | Export-Clixml -Path $fileName
         
                     }
         
                     'json' {
         
-                        $folderList | Sort-Object 'Size(Bytes)' -Descending | ConvertTo-Json | Out-File -FilePath $fileName -Force
+                        $folderList | Sort-Object $OutputSort -Descending | ConvertTo-Json | Out-File -FilePath $fileName -Force
         
                     }
         
@@ -420,7 +436,7 @@ function Get-FolderSize {
         }
     
         #Return the object array with the objects selected in the order specified
-        Return $folderList | Sort-Object 'Size(Bytes)' -Descending
+        Return $folderList | Sort-Object SizeBytes -Descending
 
     }    
 }

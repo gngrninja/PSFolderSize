@@ -2,9 +2,13 @@ InModuleScope PSFolderSize {
 
     describe 'Get-RoboSize' {
 
-        $dirSeparator = [IO.Path]::DirectorySeparatorChar
-        $artifactPath = "$PSScriptRoot$($dirSeparator)..$($dirSeparator)..$($dirSeparator)..$($dirSeparator)artifacts"
-        $resolvedPath = Resolve-Path -Path $artifactPath
+        BeforeAll {
+
+            $dirSeparator = [IO.Path]::DirectorySeparatorChar
+            $artifactPath = "$PSScriptRoot$($dirSeparator)..$($dirSeparator)..$($dirSeparator)..$($dirSeparator)artifacts"
+            $resolvedPath = Resolve-Path -Path $artifactPath            
+
+        }
 
         if (Get-Command 'robocopy' -ErrorAction SilentlyContinue) {
 
@@ -12,10 +16,10 @@ InModuleScope PSFolderSize {
 
                 $folderSize = Get-RoboSize -Path $resolvedPath
 
-                $folderSize.TotalBytes | Should Be 98
-                $folderSize.TotalKB    | Should Not Be $null
-                $folderSize.TotalMB    | Should Not Be $null                
-                $folderSize.TotalGB    | Should Not Be $null
+                $folderSize.TotalBytes | Should -Be 98
+                $folderSize.TotalKB    | Should -Not -BeNullOrEmpty
+                $folderSize.TotalMB    | Should -Not -BeNullOrEmpty
+                $folderSize.TotalGB    | Should -Not -BeNullOrEmpty
 
             }
         } 
@@ -27,9 +31,9 @@ InModuleScope PSFolderSize {
                 return $false
 
             }
-
-            {$folderSize = Get-RoboSize -Path $resolvedPath} | Should Throw 'Robocopy command is not available... cannot continue!'
-
+            
+            {$folderSize = Get-RoboSize -Path $resolvedPath -ErrorAction Continue} | Should -Throw 'Robocopy command is not available... cannot continue!'
+            
         }
     }
 }

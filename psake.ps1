@@ -29,7 +29,7 @@ task Init {
     $($(Get-Item ENV:BH*) | Out-String)
 "@    
     
-    'Pester', 'PlatyPS', 'PSScriptAnalyzer' | Foreach-Object {
+    'Pester', 'PSScriptAnalyzer' | Foreach-Object {
         if (-not (Get-Module -Name $_ -ListAvailable -Verbose:$false -ErrorAction SilentlyContinue)) {
 
             Install-Module -Name $_ -Repository PSGallery -Scope CurrentUser -AllowClobber -Confirm:$false -ErrorAction Stop
@@ -37,6 +37,7 @@ task Init {
         }
 
         Import-Module -Name $_ -Verbose:$false -Force -ErrorAction Stop
+       
     }
 
 } -description 'Initialize build environment'
@@ -46,7 +47,7 @@ task Test -Depends Init, Analyze, Pester -description 'Run test suite'
 task Analyze -Depends Build {
 
     $analysis = Invoke-ScriptAnalyzer -Path "$($ENV:BHPSModulePath)\Functions" -Verbose:$false -Recurse
-    $errors = $analysis | Where-Object {$_.Severity -eq 'Error'}
+    $errors   = $analysis | Where-Object {$_.Severity -eq 'Error'}
     $warnings = $analysis | Where-Object {$_.Severity -eq 'Warning'}
 
     if (($errors.Count -eq 0) -and ($warnings.Count -eq 0)) {
@@ -90,9 +91,9 @@ task Pester -Depends Build {
     if ($env:APPVEYOR_JOB_ID) {
 
         $wc = New-Object 'System.Net.WebClient'
-        $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", $testResultsXml)
+        $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", $testResultsXml)        
 
-    }
+    }        
     
     if ($testResults.FailedCount -gt 0) {
 
@@ -144,10 +145,10 @@ task CreateExternalHelp -Depends CreateMarkdownHelp {
 Task RegenerateHelp -Depends UpdateMarkdownHelp, CreateExternalHelp
 
 #CreateMarkdownHelp (add back to build)
-task Build -depends CreateMarkdownHelp, CreateExternalHelp {
+task Build {
 
     # External help    
-    $helpXml = New-ExternalHelp "$projectRoot\docs\reference\functions" -OutputPath (Join-Path -Path $ENV:BHPSModulePath -ChildPath 'en-US') -Force
+    #$helpXml = New-ExternalHelp "$projectRoot\docs\reference\functions" -OutputPath (Join-Path -Path $ENV:BHPSModulePath -ChildPath 'en-US') -Force
     
     Write-Output "Module XML help created at [.helpXml]"
 

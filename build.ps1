@@ -34,6 +34,7 @@ function Resolve-Module {
     )
 
     begin {
+
         Get-PackageProvider -Name Nuget -ForceBootstrap -Verbose:$false | Out-Null
         Set-PSRepository -Name PSGallery -InstallationPolicy Trusted -Verbose:$false
 
@@ -53,6 +54,7 @@ function Resolve-Module {
     }
 
     process {
+        
         $Name | ForEach-Object {
 
             $versionToImport = $null

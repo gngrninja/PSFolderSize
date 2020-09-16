@@ -103,9 +103,9 @@ function Get-FileReport { #Begin function Get-FileReport
 
             PSTypeName    = 'PS.File.List.Result'
             FileName      = $fileName
-            'Size(Bytes)' = $fileSize
-            'Size(MB)'    = $fileSizeInMB
-            'Size(GB)'    = $fileSizeInGB
+            SizeBytes     = $fileSize
+            SizeMB        = $fileSizeInMB
+            SizeGB        = $fileSizeInGB
             FullPath      = $fullPath
 
         }                        
@@ -133,9 +133,9 @@ function Get-FileReport { #Begin function Get-FileReport
             $folderObject = [PSCustomObject]@{
 
                 FileName      = "GrandTotal for [$fullPath]"
-                'Size(Bytes)' = $grandTotal
-                'Size(MB)'    = $totalFolderSizeInMB
-                'Size(GB)'    = $totalFolderSizeInGB
+                SizeBytes     = $grandTotal
+                SizeMB        = $totalFolderSizeInMB
+                SizeGB        = $totalFolderSizeInGB
                 FullPath      = 'N/A'
 
             }
@@ -168,19 +168,19 @@ function Get-FileReport { #Begin function Get-FileReport
 
                 'csv' {
 
-                    $fileList | Sort-Object 'Size(Bytes)' -Descending | Export-Csv -Path $fileName -NoTypeInformation -Force
+                    $fileList | Sort-Object SizeBytes -Descending | Export-Csv -Path $fileName -NoTypeInformation -Force
 
                 }
 
                 'xml' {
 
-                    $fileList | Sort-Object 'Size(Bytes)' -Descending | Export-Clixml -Path $fileName
+                    $fileList | Sort-Object SizeBytes -Descending | Export-Clixml -Path $fileName
 
                 }
 
                 'json' {
 
-                    $fileList | Sort-Object 'Size(Bytes)' -Descending | ConvertTo-Json | Out-File -FilePath $fileName -Force
+                    $fileList | Sort-Object SizeBytes -Descending | ConvertTo-Json | Out-File -FilePath $fileName -Force
 
                 }
 
@@ -198,6 +198,6 @@ function Get-FileReport { #Begin function Get-FileReport
     }
 
     #Return the object array with the objects selected in the order specified.
-    Return $fileList | Sort-Object 'Size(Bytes)' -Descending
+    Return $fileList | Sort-Object SizeBytes -Descending
 
 } #End function Get-FileReport

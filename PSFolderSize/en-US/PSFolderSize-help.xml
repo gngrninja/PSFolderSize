@@ -1,0 +1,602 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<helpItems schema="maml" xmlns="http://msh">
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-FileReport</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>FileReport</command:noun>
+      <maml:description>
+        <maml:para>{{ Fill in the Synopsis }}</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>{{ Fill in the Description }}</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-FileReport</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="Path">
+          <maml:name>BasePath</maml:name>
+          <maml:Description>
+            <maml:para>{{ Fill BasePath Description }}</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>AddTotal</maml:name>
+          <maml:Description>
+            <maml:para>{{ Fill AddTotal Description }}</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>FindExtension</maml:name>
+          <maml:Description>
+            <maml:para>{{ Fill FindExtension Description }}</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>FolderName</maml:name>
+          <maml:Description>
+            <maml:para>{{ Fill FolderName Description }}</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>OmitFolders</maml:name>
+          <maml:Description>
+            <maml:para>{{ Fill OmitFolders Description }}</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Output</maml:name>
+          <maml:Description>
+            <maml:para>{{ Fill Output Description }}</maml:para>
+          </maml:Description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">csv</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">xml</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">json</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>OutputFile</maml:name>
+          <maml:Description>
+            <maml:para>{{ Fill OutputFile Description }}</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>OutputPath</maml:name>
+          <maml:Description>
+            <maml:para>{{ Fill OutputPath Description }}</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>AddTotal</maml:name>
+        <maml:Description>
+          <maml:para>{{ Fill AddTotal Description }}</maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="Path">
+        <maml:name>BasePath</maml:name>
+        <maml:Description>
+          <maml:para>{{ Fill BasePath Description }}</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+        <dev:type>
+          <maml:name>String[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>FindExtension</maml:name>
+        <maml:Description>
+          <maml:para>{{ Fill FindExtension Description }}</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+        <dev:type>
+          <maml:name>String[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>FolderName</maml:name>
+        <maml:Description>
+          <maml:para>{{ Fill FolderName Description }}</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+        <dev:type>
+          <maml:name>String[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>OmitFolders</maml:name>
+        <maml:Description>
+          <maml:para>{{ Fill OmitFolders Description }}</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+        <dev:type>
+          <maml:name>String[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Output</maml:name>
+        <maml:Description>
+          <maml:para>{{ Fill Output Description }}</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>OutputFile</maml:name>
+        <maml:Description>
+          <maml:para>{{ Fill OutputFile Description }}</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>OutputPath</maml:name>
+        <maml:Description>
+          <maml:para>{{ Fill OutputPath Description }}</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.Object</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- Example 1 --------------------------</maml:title>
+        <dev:code>PS C:\&gt; {{ Add example code here }}</dev:code>
+        <dev:remarks>
+          <maml:para>{{ Add example description here }}</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks />
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-FolderSize</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>FolderSize</command:noun>
+      <maml:description>
+        <maml:para>Get-FolderSize Returns the size of folders in MB and GB. You can change the base path, omit folders, as well as output results in various formats.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>This function will get the folder size in MB and GB of folders found in the basePath parameter.  The BasePath parameter defaults to the current directory.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-FolderSize</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="Path">
+          <maml:name>BasePath</maml:name>
+          <maml:Description>
+            <maml:para>This parameter allows you to specify the base path you'd like to get the child folders of. It defaults to where the module was run from via (Get-Location).</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>(Get-Location)</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Name">
+          <maml:name>FolderName</maml:name>
+          <maml:Description>
+            <maml:para>This parameter allows you to specify the name of a specific folder you'd like to get the size of.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>All</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>OmitFolders</maml:name>
+          <maml:Description>
+            <maml:para>This parameter allows you to omit folder(s) (array of string) from being included</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>AddTotal</maml:name>
+          <maml:Description>
+            <maml:para>This parameter adds a total count at the end of the array</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>AddFileTotals</maml:name>
+          <maml:Description>
+            <maml:para>This parameter allows you to add file totals to the results Note: This will reduce performance of the script by around 30%!</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>UseRobo</maml:name>
+          <maml:Description>
+            <maml:para>{{ Fill UseRobo Description }}</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Output</maml:name>
+          <maml:Description>
+            <maml:para>Use this option to output the results. Valid options are csv, xml, or json</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>OutputPath</maml:name>
+          <maml:Description>
+            <maml:para>Specify the path you want to use when outputting the results as a csv, xml, or json file</maml:para>
+            <maml:para>Do not include a trailing slash</maml:para>
+            <maml:para>Example: C:\users\you\Desktop</maml:para>
+            <maml:para>Defaults to (Get-Location) This will be where you called the module from</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>(Get-Location)</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>OutputSort</maml:name>
+          <maml:Description>
+            <maml:para>This allows you to specify what you'd like to sort by for the csv/json/xml output. </maml:para>
+            <maml:para>Valid options are FolderSize and SizeBytes</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>OutputFile</maml:name>
+          <maml:Description>
+            <maml:para>This allows you to specify the path and file name you'd like for output</maml:para>
+            <maml:para>Example: C:\users\you\desktop\output.csv</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[string]::Empty</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="Path">
+        <maml:name>BasePath</maml:name>
+        <maml:Description>
+          <maml:para>This parameter allows you to specify the base path you'd like to get the child folders of. It defaults to where the module was run from via (Get-Location).</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+        <dev:type>
+          <maml:name>String[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>(Get-Location)</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Name">
+        <maml:name>FolderName</maml:name>
+        <maml:Description>
+          <maml:para>This parameter allows you to specify the name of a specific folder you'd like to get the size of.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+        <dev:type>
+          <maml:name>String[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>All</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>OmitFolders</maml:name>
+        <maml:Description>
+          <maml:para>This parameter allows you to omit folder(s) (array of string) from being included</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+        <dev:type>
+          <maml:name>String[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>AddTotal</maml:name>
+        <maml:Description>
+          <maml:para>This parameter adds a total count at the end of the array</maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>AddFileTotals</maml:name>
+        <maml:Description>
+          <maml:para>This parameter allows you to add file totals to the results Note: This will reduce performance of the script by around 30%!</maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>UseRobo</maml:name>
+        <maml:Description>
+          <maml:para>{{ Fill UseRobo Description }}</maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Output</maml:name>
+        <maml:Description>
+          <maml:para>Use this option to output the results. Valid options are csv, xml, or json</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>OutputPath</maml:name>
+        <maml:Description>
+          <maml:para>Specify the path you want to use when outputting the results as a csv, xml, or json file</maml:para>
+          <maml:para>Do not include a trailing slash</maml:para>
+          <maml:para>Example: C:\users\you\Desktop</maml:para>
+          <maml:para>Defaults to (Get-Location) This will be where you called the module from</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>(Get-Location)</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>OutputSort</maml:name>
+        <maml:Description>
+          <maml:para>This allows you to specify what you'd like to sort by for the csv/json/xml output. </maml:para>
+          <maml:para>Valid options are FolderSize and SizeBytes</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>OutputFile</maml:name>
+        <maml:Description>
+          <maml:para>This allows you to specify the path and file name you'd like for output</maml:para>
+          <maml:para>Example: C:\users\you\desktop\output.csv</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>[string]::Empty</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes />
+    <command:returnValues />
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Get-FolderSize | Format-Table -AutoSize</dev:code>
+        <dev:remarks>
+          <maml:para>FolderName                SizeBytes SizeMB     SizeGB</maml:para>
+          <maml:para>$GetCurrent                    193768 0.18 MB      0.00 GB $RECYCLE.BIN                 20649823 19.69 MB     0.02 GB $SysReset                    53267392 50.80 MB     0.05 GB Config.Msi                            0.00 MB      0.00 GB Documents and Settings                0.00 MB      0.00 GB Games                     48522184491 46,274.36 MB 45.19 GB</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Get-FolderSize -BasePath 'C:\Program Files'</dev:code>
+        <dev:remarks>
+          <maml:para>FolderName                                   SizeBytes SizeMB    SizeGB</maml:para>
+          <maml:para>7-Zip                                            4588532 4.38 MB     0.00 GB Adobe                                         3567833029 3,402.55 MB 3.32 GB Application Verifier                              353569 0.34 MB     0.00 GB Bonjour                                           615066 0.59 MB     0.00 GB Common Files                                   489183608 466.52 MB   0.46 GB</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>Get-FolderSize -BasePath 'C:\Program Files' -FolderName IIS</dev:code>
+        <dev:remarks>
+          <maml:para>FolderName SizeBytes SizeMB SizeGB</maml:para>
+          <maml:para>IIS            5480411 5.23 MB  0.01 GB</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 4 --------------------------</maml:title>
+        <dev:code>$getFolderSize = Get-FolderSize 
+$getFolderSize | Format-Table -AutoSize</dev:code>
+        <dev:remarks>
+          <maml:para>FolderName SizeGB SizeMB</maml:para>
+          <maml:para>Public     0.00 GB  0.00 MB thegn      2.39 GB  2,442.99 MB</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 5 --------------------------</maml:title>
+        <dev:code>$getFolderSize = Get-FolderSize -Output csv -OutputPath ~\Desktop
+$getFolderSize</dev:code>
+        <dev:remarks>
+          <maml:para>FolderName SizeGB SizeMB</maml:para>
+          <maml:para>Public     0.00 GB  0.00 MB thegn      2.39 GB  2,442.99 MB</maml:para>
+          <maml:para>(Results will also be exported as a CSV to your Desktop folder)</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 6 --------------------------</maml:title>
+        <dev:code>Sort by size descending 
+$getFolderSize = Get-FolderSize | Sort-Object SizeBytes -Descending
+$getFolderSize</dev:code>
+        <dev:remarks>
+          <maml:para>FolderName                SizeBytes SizeMB     SizeGB</maml:para>
+          <maml:para>Users                     76280394429 72,746.65 MB 71.04 GB Games                     48522184491 46,274.36 MB 45.19 GB Program Files (x86)       27752593691 26,466.94 MB 25.85 GB Windows                   25351747445 24,177.31 MB 23.61 GB</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 7 --------------------------</maml:title>
+        <dev:code>Omit folder(s) from being included 
+Get-FolderSize.ps1 -OmitFolders 'C:\Temp','C:\Windows'</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 8 --------------------------</maml:title>
+        <dev:code>Add file counts for each folder
+Note: This will slow down the execution of the script by around 30%</dev:code>
+        <dev:remarks>
+          <maml:para>$results = Get-FolderSize -AddFileTotal</maml:para>
+          <maml:para>PS /Users/ninja/Documents/repos/PSFolderSize&gt; $results[0] | Format-List *</maml:para>
+          <maml:para>FolderName  : .git SizeBytes   : 228591 SizeMB      : 0.22 SizeGB      : 0.00 FullPath    : /Users/ninja/Documents/repos/PSFolderSize/.git HostName    : njambp.local FileCount   : 382</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks />
+  </command:command>
+</helpItems>

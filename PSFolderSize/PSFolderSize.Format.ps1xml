@@ -28,10 +28,10 @@
                                 <PropertyName>FolderName</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>Size(MB)</PropertyName>
+                                <PropertyName>SizeMB</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>Size(GB)</PropertyName>
+                                <PropertyName>SizeGB</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>FullPath</PropertyName>
@@ -68,10 +68,10 @@
                                 <PropertyName>FileName</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>Size(MB)</PropertyName>
+                                <PropertyName>SizeMB</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>Size(GB)</PropertyName>
+                                <PropertyName>SizeGB</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>FullPath</PropertyName>

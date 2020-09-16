@@ -17,19 +17,18 @@ You can change the base path, omit folders, as well as output results in various
 ### default (Default)
 ```
 Get-FolderSize [[-BasePath] <String[]>] [-FolderName <String[]>] [-OmitFolders <String[]>] [-AddTotal]
- [-AddFileTotals] [-UseRobo] [-Output <String>] [-OutputPath <String>] [-OutputFile <String>]
- [<CommonParameters>]
+ [-AddFileTotals] [-UseRobo] [-Output <String>] [-OutputPath <String>] [-OutputSort <String>]
+ [-OutputFile <String>] [<CommonParameters>]
 ```
 
 ### outputWithType
 ```
-Get-FolderSize [-Output <String>] [-OutputPath <String>] [<CommonParameters>]
+Get-FolderSize [-Output <String>] [-OutputPath <String>] [-OutputSort <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 This function will get the folder size in MB and GB of folders found in the basePath parameter. 
-The basePath parameter defaults to C:\Users.
-You can also specify a specific folder name via the folderName parameter.
+The BasePath parameter defaults to the current directory.
 
 ## EXAMPLES
 
@@ -38,7 +37,7 @@ You can also specify a specific folder name via the folderName parameter.
 Get-FolderSize | Format-Table -AutoSize
 ```
 
-FolderName                Size(Bytes) Size(MB)     Size(GB)
+FolderName                SizeBytes SizeMB     SizeGB
 
 $GetCurrent                    193768 0.18 MB      0.00 GB
 $RECYCLE.BIN                 20649823 19.69 MB     0.02 GB
@@ -52,7 +51,7 @@ Games                     48522184491 46,274.36 MB 45.19 GB
 Get-FolderSize -BasePath 'C:\Program Files'
 ```
 
-FolderName                                   Size(Bytes) Size(MB)    Size(GB)
+FolderName                                   SizeBytes SizeMB    SizeGB
 
 7-Zip                                            4588532 4.38 MB     0.00 GB
 Adobe                                         3567833029 3,402.55 MB 3.32 GB
@@ -65,19 +64,17 @@ Common Files                                   489183608 466.52 MB   0.46 GB
 Get-FolderSize -BasePath 'C:\Program Files' -FolderName IIS
 ```
 
-FolderName Size(Bytes) Size(MB) Size(GB)
+FolderName SizeBytes SizeMB SizeGB
 
 IIS            5480411 5.23 MB  0.01 GB
 
 ### EXAMPLE 4
 ```
-$getFolderSize = Get-FolderSize
+$getFolderSize = Get-FolderSize 
+$getFolderSize | Format-Table -AutoSize
 ```
 
-$getFolderSize | Format-Table -AutoSize
-
-
-FolderName Size(GB) Size(MB)
+FolderName SizeGB SizeMB
 
 Public     0.00 GB  0.00 MB
 thegn      2.39 GB  2,442.99 MB
@@ -85,12 +82,10 @@ thegn      2.39 GB  2,442.99 MB
 ### EXAMPLE 5
 ```
 $getFolderSize = Get-FolderSize -Output csv -OutputPath ~\Desktop
+$getFolderSize
 ```
 
-$getFolderSize 
-
-
-FolderName Size(GB) Size(MB)
+FolderName SizeGB SizeMB
 
 Public     0.00 GB  0.00 MB
 thegn      2.39 GB  2,442.99 MB
@@ -99,14 +94,12 @@ thegn      2.39 GB  2,442.99 MB
 
 ### EXAMPLE 6
 ```
-Sort by size descending
+Sort by size descending 
+$getFolderSize = Get-FolderSize | Sort-Object SizeBytes -Descending
+$getFolderSize
 ```
 
-$getFolderSize = Get-FolderSize | Sort-Object 'Size(Bytes)' -Descending
-$getFolderSize 
-
-
-FolderName                Size(Bytes) Size(MB)     Size(GB)
+FolderName                SizeBytes SizeMB     SizeGB
 
 Users                     76280394429 72,746.65 MB 71.04 GB
 Games                     48522184491 46,274.36 MB 45.19 GB
@@ -115,26 +108,24 @@ Windows                   25351747445 24,177.31 MB 23.61 GB
 
 ### EXAMPLE 7
 ```
-Omit folder(s) from being included
-```
-
+Omit folder(s) from being included 
 Get-FolderSize.ps1 -OmitFolders 'C:\Temp','C:\Windows'
+```
 
 ### EXAMPLE 8
 ```
 Add file counts for each folder
-```
-
 Note: This will slow down the execution of the script by around 30%
+```
 
 $results = Get-FolderSize -AddFileTotal
 
 PS /Users/ninja/Documents/repos/PSFolderSize\> $results\[0\] | Format-List *
 
 FolderName  : .git
-Size(Bytes) : 228591
-Size(MB)    : 0.22
-Size(GB)    : 0.00
+SizeBytes   : 228591
+SizeMB      : 0.22
+SizeGB      : 0.00
 FullPath    : /Users/ninja/Documents/repos/PSFolderSize/.git
 HostName    : njambp.local
 FileCount   : 382
@@ -203,7 +194,7 @@ Accept wildcard characters: False
 ```
 
 ### -AddFileTotals
-This parameter allows you to add file totals to the results. 
+This parameter allows you to add file totals to the results
 Note: This will reduce performance of the script by around 30%!
 
 ```yaml
@@ -235,7 +226,7 @@ Accept wildcard characters: False
 
 ### -Output
 Use this option to output the results.
-Valid options are csv, xml, or json.
+Valid options are csv, xml, or json
 
 ```yaml
 Type: String
@@ -250,14 +241,14 @@ Accept wildcard characters: False
 ```
 
 ### -OutputPath
-Specify the path you want to use when outputting the results as a csv, xml, or json file.
+Specify the path you want to use when outputting the results as a csv, xml, or json file
 
-Do not include a trailing slash.
+Do not include a trailing slash
 
 Example: C:\users\you\Desktop
 
 Defaults to (Get-Location)
-This will be where you called the module from.
+This will be where you called the module from
 
 ```yaml
 Type: String
@@ -271,8 +262,25 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -OutputSort
+This allows you to specify what you'd like to sort by for the csv/json/xml output. 
+
+Valid options are FolderSize and SizeBytes
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -OutputFile
-This allows you to specify the path and file name you'd like for output.
+This allows you to specify the path and file name you'd like for output
 
 Example: C:\users\you\desktop\output.csv
 
