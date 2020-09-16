@@ -75,7 +75,9 @@ task Analyze -Depends Build {
 task Pester -Depends Build {
 
     if(-not $ENV:BHProjectPath) {
+
         Set-BuildEnvironment -Path $PSScriptRoot\..
+        
     }
 
     #Remove and import module for testing
