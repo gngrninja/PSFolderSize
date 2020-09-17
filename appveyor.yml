@@ -1,6 +1,6 @@
 environment:
   matrix:
-    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
       PowerShellEdition: PowerShellCore    
   snowflake:
     secure: 2/KrmaMSE+h1uoCEQ5oU9yPpghEd3MhsqaN+Yzoinwga9PLaXXh1cGMHklEzcJ7H
