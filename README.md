@@ -1,6 +1,8 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/dc0dfydghko3jck5/branch/master?svg=true)](https://ci.appveyor.com/project/gngrninja/psfoldersize/branch/master) [![Build Status](https://dev.azure.com/ginja/PSFolderSize/_apis/build/status/PSFolderSize-CI)](https://dev.azure.com/ginja/PSFolderSize/_build/latest?definitionId=3)
-[![Documentation Status](https://readthedocs.org/projects/psfoldersize/badge/?version=latest)](https://psfoldersize.readthedocs.io/en/latest/?badge=latest)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+[![Documentation Status][docs-badge]][docs]
+[![License: MIT][license-badge]][license]
+[![PowerShell Gallery][psgallery-badge]][psgallery]
 
 [![PSFolderSize](https://static1.squarespace.com/static/5644323de4b07810c0b6db7b/t/5bcc1e9e419202a53790e662/1540103847317/PSFolderSize.png)](https://www.gngrninja.com/script-ninja/2016/5/24/powershell-calculating-folder-sizes)
 
@@ -42,3 +44,10 @@ Check out the Examples folder for example(s) on how to use the module.
 There's only one for now, with more to come!
 
 *Leave an issue here if you have some feedback, issues, or questions.*
+
+[license]: https://opensource.org/licenses/MIT
+[license-badge]: https://img.shields.io/badge/License-MIT-yellow.svg
+[psgallery-badge]: https://img.shields.io/powershellgallery/dt/psfoldersize.svg
+[psgallery]: https://www.powershellgallery.com/packages/psfoldersize
+[docs-badge]: https://readthedocs.org/projects/psfoldersize/badge/?version=latest
+[docs]: https://psfoldersize.readthedocs.io/en/latest/
