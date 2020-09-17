@@ -123,7 +123,7 @@ function Resolve-Module {
     }
 }
 
-'BuildHelpers', 'psake', 'PSDeploy' | Resolve-Module -UpdateModules:($PSBoundParameters.ContainsKey('UpdateModules'))
+'BuildHelpers', 'psake', 'PSDeploy', 'Pester' | Resolve-Module -UpdateModules:($PSBoundParameters.ContainsKey('UpdateModules'))
 
 if ($PSBoundParameters.ContainsKey('help')) {
 
