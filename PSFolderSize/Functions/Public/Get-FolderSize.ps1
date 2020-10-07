@@ -339,9 +339,9 @@ function Get-FolderSize {
 
                 $folderList | ForEach-Object {
                     
-                    if ($_.'Size(Bytes)' -gt 0) {
+                    if ($_.SizeBytes -gt 0) {
 
-                        $grandTotal += $_.'Size(Bytes)'
+                        $grandTotal += $_.SizeBytes
 
                     }                  
                 }
