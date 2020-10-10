@@ -15,6 +15,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changing
 - Adding tests/official support for Get-FileReport
 
+## [1.7.1] 2020-10-10
+### Fixed
+- Fixed adding totals
+
 ## [1.7] 2020-09-16
 ### Changed
 - Changed results to display as Bytes, SizeKB, SizeMB, and SizeGB.
