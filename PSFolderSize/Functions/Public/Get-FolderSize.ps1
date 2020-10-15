@@ -352,6 +352,7 @@ function Get-FolderSize {
 
                 $folderObject = [PSCustomObject]@{
 
+                    PSTypeName    = 'PS.Folder.List.Result'
                     FolderName    = "GrandTotal for [$BasePath]"
                     SizeBytes     = $grandTotal
                     SizeKB        = $totalFolderSizeInKB
