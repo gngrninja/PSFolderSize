@@ -71,8 +71,8 @@ function Get-FileReport { #Begin function Get-FileReport
 
     $foundFiles = $null
 
-    #Create array to store folder objects found with size info.
-    [System.Collections.ArrayList]$fileList = @()
+    #Create list to store folder objects found with size info.
+    [System.Collections.Generic.List[Object]]$fileList = @()
 
     #Go through each folder in the base path.
     ForEach ($file in $allFolders) {
@@ -98,7 +98,7 @@ function Get-FileReport { #Begin function Get-FileReport
         [double]$fileSizeInMB = "{0:N2}" -f ($fileSize / 1MB)
         [double]$fileSizeInGB = "{0:N2}" -f ($fileSize / 1GB)
 
-        #Here we create a custom object that we'll add to the array
+        #Here we create a custom object that we'll add to the list
         $folderObject = [PSCustomObject]@{
 
             PSTypeName    = 'PS.File.List.Result'
@@ -110,8 +110,8 @@ function Get-FileReport { #Begin function Get-FileReport
 
         }                        
 
-        #Add the object to the array
-        $fileList.Add($folderObject) | Out-Null
+        #Add the object to the list
+        $fileList.Add($folderObject)
 
     }
 
@@ -140,8 +140,8 @@ function Get-FileReport { #Begin function Get-FileReport
 
             }
 
-            #Add the object to the array
-            $fileList.Add($folderObject) | Out-Null
+            #Add the object to the list
+            $fileList.Add($folderObject)
         }   
 
     }
@@ -197,7 +197,7 @@ function Get-FileReport { #Begin function Get-FileReport
     
     }
 
-    #Return the object array with the objects selected in the order specified.
+    #Return the object list with the objects selected in the order specified.
     Return $fileList | Sort-Object SizeBytes -Descending
 
 } #End function Get-FileReport
