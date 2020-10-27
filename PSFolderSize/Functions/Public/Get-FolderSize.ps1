@@ -244,8 +244,8 @@ function Get-FolderSize {
         #Get a list of all the directories in the base path we're looking for.
         $allFolders = Get-FolderList -FolderName $FolderName -OmitFolders $OmitFolders -BasePath $BasePath
         
-        #Create array to store folder objects found with size info.
-        [System.Collections.ArrayList]$folderList = @()
+        #Create list to store folder objects found with size info.
+        [System.Collections.Generic.List[Object]]$folderList = @()
 
         #Get hostname
         $hostName = [System.Net.Dns]::GetHostByName((hostname)).HostName
@@ -303,7 +303,7 @@ function Get-FolderSize {
                 }
             }
 
-            #Here we create a custom object that we'll add to the array
+            #Here we create a custom object that we'll add to the list
             $folderObject = [PSCustomObject]@{
 
                 PSTypeName    = 'PS.Folder.List.Result'
@@ -325,8 +325,8 @@ function Get-FolderSize {
 
             }
 
-            #Add the object to the array
-            $folderList.Add($folderObject) | Out-Null
+            #Add the object to the list
+            $folderList.Add($folderObject)
 
             }
 
@@ -377,8 +377,8 @@ function Get-FolderSize {
 
             }
 
-            #Add the object to the array
-            $folderList.Add($folderObject) | Out-Null
+            #Add the object to the list
+            $folderList.Add($folderObject)
 
         }   
     }
