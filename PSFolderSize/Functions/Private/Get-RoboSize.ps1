@@ -33,6 +33,7 @@ function Get-RoboSize {
             "/FP",
             "/NC",
             "/NDL",
+            "/NFL",
             "/TS",
             "/XJ",
             "/R:0",
@@ -43,7 +44,7 @@ function Get-RoboSize {
         [DateTime]$startTime = [DateTime]::Now
 
         Write-Verbose "Running -> [robocopy $($Path) NULL $($args)] <-"
-        [string]$summary     = robocopy $Path NULL $args | Select-Object -Last 8
+        [string]$summary     = robocopy $Path NULL $args
         [DateTime]$endTime   = [DateTime]::Now
         [regex]$headerRegex  = '\s+Total\s*Copied\s+Skipped\s+Mismatch\s+FAILED\s+Extras'
         [regex]$dirRegex     = 'Dirs\s*:\s*(?<DirCount>\d+)(?:\s+\d+){3}\s+(?<DirFailed>\d+)\s+\d+'
