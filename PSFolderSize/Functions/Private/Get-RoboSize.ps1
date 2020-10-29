@@ -18,7 +18,7 @@ function Get-RoboSize {
         Mandatory = $false
         )]
         [int]
-        $Threads = 16
+        $Threads = [System.Environment]::ProcessorCount
     )
 
     if (Get-Command -Name 'robocopy') {
