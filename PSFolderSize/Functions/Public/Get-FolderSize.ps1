@@ -241,6 +241,13 @@ function Get-FolderSize {
 
     begin {
 
+        #Add default for OutputSort
+        if ([string]::IsNullOrEmpty($OutputSort)) {
+
+            $OutputSort = 'SizeBytes'
+
+        }
+
         #Get a list of all the directories in the base path we're looking for.
         $allFolders = Get-FolderList -FolderName $FolderName -OmitFolders $OmitFolders -BasePath $BasePath
         
