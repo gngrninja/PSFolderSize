@@ -18,7 +18,7 @@ function Get-RoboSize {
         Mandatory = $false
         )]
         [int]
-        $Threads = 16
+        $Threads = [System.Environment]::ProcessorCount
     )
 
     if (Get-Command -Name 'robocopy') {
@@ -46,12 +46,12 @@ function Get-RoboSize {
         Write-Verbose "Running -> [robocopy $($Path) NULL $($args)] <-"
         [string]$summary     = robocopy $Path NULL $args
         [DateTime]$endTime   = [DateTime]::Now
-        [regex]$headerRegex  = '\s+Total\s*Copied\s+Skipped\s+Mismatch\s+FAILED\s+Extras'
-        [regex]$dirRegex     = 'Dirs\s*:\s*(?<DirCount>\d+)(?:\s+\d+){3}\s+(?<DirFailed>\d+)\s+\d+'
-        [regex]$fileRegex    = 'Files\s*:\s*(?<FileCount>\d+)(?:\s+\d+){3}\s+(?<FileFailed>\d+)\s+\d+'
-        [regex]$byteRegex    = 'Bytes\s*:\s*(?<ByteCount>\d+)(?:\s+\d+){3}\s+(?<BytesFailed>\d+)\s+\d+'
-        [regex]$timeRegex    = 'Times\s*:\s*(?<TimeElapsed>\d+).*'
-        [regex]$endRegex     = 'Ended\s*:\s*(?<EndedTime>.+)'
+        [regex]$headerRegex  = '\s+[\w\.]+\s*[\w\.]+\s+[\w\.]+\s+[\w\.]+\s+[\w\.]+\s+[\w\.]+'
+        [regex]$dirRegex     = '[\w\.]+\s*:\s*(?<DirCount>\d+)(?:\s+\d+){3}\s+(?<DirFailed>\d+)\s+\d+'
+        [regex]$fileRegex    = '[\w\.]+\s*:\s*(?<FileCount>\d+)(?:\s+\d+){3}\s+(?<FileFailed>\d+)\s+\d+'
+        [regex]$byteRegex    = '[\w\.]+\s*:\s*(?<ByteCount>\d+)(?:\s+\d+){3}\s+(?<BytesFailed>\d+)\s+\d+'
+        [regex]$timeRegex    = '[\w\.]+\s*:\s*(?<TimeElapsed>\d+).*'
+        [regex]$endRegex     = '[\w\.]+\s*:\s*(?<EndedTime>.+)'
 
         Write-Verbose "Raw summary:"
         Write-Verbose ($summary | Out-String)
