@@ -60,6 +60,11 @@ function Get-FolderSize {
     This parameter allows you to add file totals to the results
     Note: This will reduce performance of the script by around 30%!
 
+    .PARAMETER IgnoreLinks
+
+    This parameter defaults to true, set to false if you want to include sym/hard links for some reason
+    Note: This will add to the total in an unexpected way (including the link target's total)
+
     .EXAMPLE 
 
     Get-FolderSize | Format-Table -AutoSize
@@ -236,7 +241,13 @@ function Get-FolderSize {
             ParameterSetName = 'default'
         )]
         [String]
-        $OutputFile = [string]::Empty
+        $OutputFile = [string]::Empty,
+
+        [Parameter(
+            ParameterSetName = 'default'
+        )]
+        [Boolean]
+        $IgnoreLinks = $true
     )
 
     begin {
@@ -249,7 +260,15 @@ function Get-FolderSize {
         }
 
         #Get a list of all the directories in the base path we're looking for.
-        $allFolders = Get-FolderList -FolderName $FolderName -OmitFolders $OmitFolders -BasePath $BasePath
+        if ($IgnoreLinks) {
+
+            $allFolders = Get-FolderList -FolderName $FolderName -OmitFolders $OmitFolders -BasePath $BasePath | Where-Object {!$_.LinkType}
+
+        } else {
+
+            $allFolders = Get-FolderList -FolderName $FolderName -OmitFolders $OmitFolders -BasePath $BasePath
+
+        }
         
         #Create list to store folder objects found with size info.
         [System.Collections.Generic.List[Object]]$folderList = @()
@@ -296,7 +315,16 @@ function Get-FolderSize {
 
             } else {
 
-                $folderInfo = Get-Childitem -LiteralPath $fullPath -Recurse -Force -ErrorAction SilentlyContinue 
+                if ($IgnoreLinks) {
+
+                    $folderInfo = Get-Childitem -LiteralPath $fullPath -Recurse -Force -ErrorAction SilentlyContinue | Where-Object {!$_.LinkType}
+                
+                } else {
+
+                    $folderInfo = Get-Childitem -LiteralPath $fullPath -Recurse -Force -ErrorAction SilentlyContinue
+                
+                }
+                 
                 $folderSize = $folderInfo | Measure-Object -Property Length -Sum -ErrorAction SilentlyContinue       
 
                 #We use the string format operator here to show only 2 decimals, and do some PS Math.            
