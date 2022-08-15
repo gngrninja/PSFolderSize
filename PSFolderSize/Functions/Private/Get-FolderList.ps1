@@ -62,7 +62,7 @@ function Get-FolderList {
             $allFolders = Get-ChildItem -LiteralPath $BasePath -Force | 
                 Where-Object {
 
-                    ($_.BaseName -match "$FolderName") -and 
+                    ($_.BaseName -like "$FolderName") -and 
                     ($OmitFolders -notcontains $_.FullName)
 
             }
