@@ -1,5 +1,4 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/dc0dfydghko3jck5/branch/master?svg=true)](https://ci.appveyor.com/project/gngrninja/psfoldersize/branch/master) [![Build Status](https://dev.azure.com/ginja/PSFolderSize/_apis/build/status/PSFolderSize-CI)](https://dev.azure.com/ginja/PSFolderSize/_build/latest?definitionId=3)
-
+[![Build](https://github.com/gngrninja/PSFolderSize/actions/workflows/ci.yml/badge.svg)](https://github.com/gngrninja/PSFolderSize/actions/workflows/ci.yml)
 [![Documentation Status][docs-badge]][docs]
 [![License: MIT][license-badge]][license]
 [![PowerShell Gallery][psgallery-badge]][psgallery]

@@ -123,7 +123,7 @@ function Get-FileReport { #Begin function Get-FileReport
         
             $fileList | ForEach-Object {
 
-                $grandTotal += $_.'Size(Bytes)'    
+                $grandTotal += $_.SizeBytes
 
             }
 
