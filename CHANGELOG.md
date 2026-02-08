@@ -7,13 +7,15 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-### Adding
-- Ability to use wildcards if looking for files
-- Ability to find file with a particular extension
-- Ability to use robocopy if specified
+## [1.7.2] 2026-02-07
 
-### Changing
-- Adding tests/official support for Get-FileReport
+### Fixed
+- Fixed Get-FileReport -AddTotal calculating incorrect totals
+
+### Changed
+- Build system migrated from psake to Invoke-Build
+- CI migrated from AppVeyor/Azure Pipelines to GitHub Actions
+- Expanded test coverage
 
 ## [1.7.1] 2020-10-10
 ### Fixed

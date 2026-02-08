@@ -27,7 +27,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: test-results-${{ matrix.os }}
-          path: tests/artifacts/testResults.xml
+          path: output/testResults.xml
 
   publish:
     name: Publish to PSGallery
@@ -51,4 +51,4 @@ jobs:
         shell: pwsh
         env:
           PSGALLERY_API_KEY: ${{ secrets.PSGALLERY_API_KEY }}
-        run: ./build.ps1 -Task Publish -NuGetApiKey $env:PSGALLERY_API_KEY
+        run: ./build.ps1 -Task Build, Publish -NuGetApiKey $env:PSGALLERY_API_KEY
