@@ -1,39 +1,68 @@
-InModuleScope PSFolderSize {
+BeforeAll {
+    $projectRoot = Resolve-Path "$PSScriptRoot/../../../.."
+    $outputModule = Join-Path $projectRoot 'output/PSFolderSize/PSFolderSize.psd1'
+    $sourceModule = Join-Path $projectRoot 'PSFolderSize/PSFolderSize.psd1'
+    $modulePath = if (Test-Path $outputModule) { $outputModule } else { $sourceModule }
+    Get-Module PSFolderSize | Remove-Module -Force
+    Import-Module $modulePath -Force
 
-    describe 'Get-RoboSize' {
+    $hasRobocopy = [bool](Get-Command 'robocopy' -ErrorAction SilentlyContinue)
+}
 
-        BeforeAll {
+Describe 'Get-RoboSize' {
 
-            $dirSeparator = [IO.Path]::DirectorySeparatorChar
-            $artifactPath = "$PSScriptRoot$($dirSeparator)..$($dirSeparator)..$($dirSeparator)..$($dirSeparator)artifacts"
-            $resolvedPath = Resolve-Path -Path $artifactPath            
+    BeforeAll {
 
+        $dirSeparator = [IO.Path]::DirectorySeparatorChar
+        $artifactPath = "$PSScriptRoot$($dirSeparator)..$($dirSeparator)..$($dirSeparator)..$($dirSeparator)artifacts"
+        $resolvedPath = Resolve-Path -Path $artifactPath
+
+    }
+
+    It 'Should return an object with bytes, mb, and gb' -Skip:(-not $hasRobocopy) {
+
+        $params = @{
+            resolvedPath = $resolvedPath.ToString()
         }
 
-        if (Get-Command 'robocopy' -ErrorAction SilentlyContinue) {
+        InModuleScope PSFolderSize -Parameters $params {
+            $folderSize = Get-RoboSize -Path $resolvedPath
 
-            it 'Should return an object with bytes, mb, and gb' {
+            $folderSize.TotalBytes | Should -Be 98
+            $folderSize.TotalKB    | Should -Not -BeNullOrEmpty
+            $folderSize.TotalMB    | Should -Not -BeNullOrEmpty
+            $folderSize.TotalGB    | Should -Not -BeNullOrEmpty
+        }
+    }
 
-                $folderSize = Get-RoboSize -Path $resolvedPath
+    It 'Should error out if robocopy is not available' {
 
-                $folderSize.TotalBytes | Should -Be 98
-                $folderSize.TotalKB    | Should -Not -BeNullOrEmpty
-                $folderSize.TotalMB    | Should -Not -BeNullOrEmpty
-                $folderSize.TotalGB    | Should -Not -BeNullOrEmpty
+        $params = @{
+            resolvedPath = $resolvedPath.ToString()
+        }
 
-            }
-        } 
-
-        it 'Should error out if robocopy is not available' {
-
-            mock Get-Command {
+        InModuleScope PSFolderSize -Parameters $params {
+            Mock Get-Command {
 
                 return $false
 
             }
-            
+
             {$folderSize = Get-RoboSize -Path $resolvedPath -ErrorAction Continue} | Should -Throw 'Robocopy command is not available... cannot continue!'
-            
+        }
+    }
+
+    It 'Returns null when robocopy output does not match regex' -Skip:(-not $hasRobocopy) {
+
+        $params = @{
+            resolvedPath = $resolvedPath.ToString()
+        }
+
+        InModuleScope PSFolderSize -Parameters $params {
+            Mock robocopy { return 'garbage output that does not match' }
+
+            $result = Get-RoboSize -Path $resolvedPath
+            $result | Should -BeNullOrEmpty
         }
     }
 }

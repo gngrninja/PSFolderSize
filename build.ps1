@@ -1,142 +1,43 @@
-[cmdletbinding(
-    DefaultParameterSetName = 'task'
-)]
+<#
+.SYNOPSIS
+    Bootstrap script that installs build dependencies and invokes the build.
+.PARAMETER Task
+    The Invoke-Build task(s) to run. Defaults to the default task (Clean, Build, Analyze, Test).
+.PARAMETER NuGetApiKey
+    API key for publishing to the PowerShell Gallery.
+#>
+[CmdletBinding()]
 param(
-    [parameter(
-        ParameterSetName = 'task', 
-        Position = 0
-    )]
-    [string[]]
-    $Task = 'default',
+    [string[]]$Task,
 
-    [parameter(
-        ParameterSetName = 'help'
-    )]
-    [switch]
-    $Help,
-
-    [switch]
-    $UpdateModules
+    [string]$NuGetApiKey = $env:PSGALLERY_API_KEY
 )
 
-function Resolve-Module {
-    [Cmdletbinding()]
-    param (
-        [Parameter(
-            Mandatory, 
-            ValueFromPipeline
-        )]
-        [string[]]
-        $Name,
-
-        [switch]
-        $UpdateModules
-    )
-
-    begin {
-
-        Get-PackageProvider -Name Nuget -ForceBootstrap -Verbose:$false | Out-Null
-        Set-PSRepository -Name PSGallery -InstallationPolicy Trusted -Verbose:$false
-
-        $PSDefaultParameterValues = @{
-
-            '*-Module:Verbose'            = $false
-            'Install-Module:ErrorAction'  = 'Stop'
-            'Install-Module:Force'        = $true
-            'Install-Module:Scope'        = 'CurrentUser'
-            'Install-Module:Verbose'      = $false
-            'Install-Module:AllowClobber' = $true
-            'Import-Module:ErrorAction'   = 'Stop'
-            'Import-Module:Verbose'       = $false
-            'Import-Module:Force'         = $true
-
-        }
-    }
-
-    process {
-        
-        $Name | ForEach-Object {
-
-            $versionToImport = $null
-            $moduleName      = $null
-            $moduleName      = $_
-            
-            Write-Verbose -Message "Resolving Module [$($moduleName)]"
-
-            if ($Module = Get-Module -Name $moduleName -ListAvailable -Verbose:$false) {
-
-                #Get local ver and PSGallery ver
-                $latestLocalVersion   = ($Module | Measure-Object -Property Version -Maximum).Maximum
-                $latestGalleryVersion = (
-                    Find-Module -Name $moduleName -Repository PSGallery |
-                        Measure-Object -Property Version -Maximum
-                    ).Maximum
-
-                #Check if out of date
-                if ($latestLocalVersion -lt $latestGalleryVersion) {
-                    if ($UpdateModules) {
-
-                        Write-Verbose -Message "$($moduleName) installed version [$($latestLocalVersion.ToString())] is outdated. Installing gallery version [$($latestGalleryVersion.ToString())]"
-
-                        if ($UpdateModules) {
-
-                            Write-Verbose "Updating module [$moduleName] from [$latestLocalVersion] to [$latestGalleryVersion]"
-                            
-                            Install-Module -Name $moduleName -RequiredVersion $latestGalleryVersion
-                            $versionToImport = $latestGalleryVersion
-
-                        }
-                    } else {
-
-                        Write-Warning "$($moduleName) is out of date. Latest version on PSGallery is [$latestGalleryVersion]. To update, use the -UpdateModules switch."
-
-                    }
-                } else {
-
-                    $versionToImport = $latestLocalVersion
-
-                }
-            } else {
-
-                Write-Verbose -Message "[$($moduleName)] missing. Installing..."
-
-                Install-Module -Name $moduleName -Repository PSGallery
-                $versionToImport = (
-                        Get-Module -Name $moduleName -ListAvailable | 
-                            Measure-Object -Property Version -Maximum
-                        ).Maximum
-
-            }
-
-            Write-Verbose -Message "$($moduleName) installed. Importing..."
-
-            if (-not [string]::IsNullOrEmpty($versionToImport)) {
-
-                Import-module -Name $moduleName -RequiredVersion $versionToImport
-
-            } else {
-
-                Import-module -Name $moduleName
-
-            }
-        }
-    }
+# Ensure PSResourceGet is available for dependency installation
+if (-not (Get-Command 'Install-PSResource' -ErrorAction SilentlyContinue)) {
+    Write-Host 'Installing Microsoft.PowerShell.PSResourceGet...' -ForegroundColor Cyan
+    Install-Module -Name Microsoft.PowerShell.PSResourceGet -Force -Scope CurrentUser -AllowClobber
 }
 
-'BuildHelpers', 'psake', 'PSDeploy', 'Pester' | Resolve-Module -UpdateModules:($PSBoundParameters.ContainsKey('UpdateModules'))
+# Install required modules from RequiredModules.psd1
+$requiredModules = Import-PowerShellDataFile -Path "$PSScriptRoot/RequiredModules.psd1"
 
-if ($PSBoundParameters.ContainsKey('help')) {
+foreach ($moduleName in $requiredModules.Keys) {
+    $requiredVersion = $requiredModules[$moduleName]
+    $installed = Get-Module -Name $moduleName -ListAvailable |
+        Where-Object { $_.Version -ge [version]$requiredVersion }
 
-    Get-PSakeScriptTasks -buildFile "$PSScriptRoot\psake.ps1" |
-        Sort-Object -Property Name                            |
-        Format-Table -Property Name, Description, Alias, DependsOn
+    if (-not $installed) {
+        Write-Host "Installing $moduleName $requiredVersion..." -ForegroundColor Cyan
+        Install-PSResource -Name $moduleName -Version $requiredVersion -Scope CurrentUser -TrustRepository
+    }
 
-} else {
-
-    Set-BuildEnvironment -Force
-
-    Invoke-psake -buildFile "$PSScriptRoot\psake.ps1" -taskList $Task -nologo -Verbose:($VerbosePreference -eq 'Continue')
-    
-    if ($psake.build_success -eq $false) {exit 1 } else { exit 0 }
-
+    Import-Module -Name $moduleName -MinimumVersion $requiredVersion -Force
 }
+
+# Run Invoke-Build
+$ibParams = @{}
+if ($Task)        { $ibParams['Task'] = $Task }
+if ($NuGetApiKey) { $ibParams['NuGetApiKey'] = $NuGetApiKey }
+
+Invoke-Build @ibParams -File "$PSScriptRoot/PSFolderSize.build.ps1"
