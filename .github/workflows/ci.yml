@@ -33,12 +33,21 @@ jobs:
     name: Publish to PSGallery
     needs: build-and-test
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main')
+    if: startsWith(github.ref, 'refs/tags/v')
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Publish module
+      - name: Set version from tag
+        shell: pwsh
+        run: |
+          $version = '${{ github.ref_name }}'.TrimStart('v')
+          Write-Host "Setting module version to $version"
+          $manifestPath = './PSFolderSize/PSFolderSize.psd1'
+          (Get-Content $manifestPath -Raw) -replace "ModuleVersion\s*=\s*'[^']*'", "ModuleVersion = '$version'" | Set-Content $manifestPath
+          Write-Host "Manifest version: $((Test-ModuleManifest $manifestPath).Version)"
+
+      - name: Build and publish
         shell: pwsh
         env:
           PSGALLERY_API_KEY: ${{ secrets.PSGALLERY_API_KEY }}
