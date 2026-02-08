@@ -7,7 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-## [1.7.2] 2026-02-07
+## [1.7.3] 2026-02-07
 
 ### Fixed
 - Fixed Get-FileReport -AddTotal calculating incorrect totals
