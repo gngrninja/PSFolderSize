@@ -2,14 +2,16 @@ function Get-FolderList {
     [cmdletbinding()]
     param(
         [Parameter()]
+        [SupportsWildcards()]
         [string[]]
-        $FolderName,
+        $FolderName = '*',
 
         [Parameter()]
         [string[]]
         $BasePath,
 
         [Parameter()]
+        [SupportsWildcards()]
         [string[]]
         $OmitFolders,
 
@@ -17,75 +19,202 @@ function Get-FolderList {
         [string[]]
         $FindExtension
     )
-    
+
     begin {
 
+        if (-not $FolderName) {
+
+            $FolderName = '*'
+
+        }
+
+        #'all' was the default before wildcards were supported
+        $FolderName = $FolderName -replace '^all$', '*'
+        $matchAll   = $FolderName -contains '*'
+        $separator  = [System.IO.Path]::DirectorySeparatorChar
+
+        $namePatterns = [System.Collections.Generic.List[System.Management.Automation.WildcardPattern]]::new()
+        $omitNames    = [System.Collections.Generic.List[System.Management.Automation.WildcardPattern]]::new()
+        $omitPaths    = [System.Collections.Generic.List[System.Management.Automation.WildcardPattern]]::new()
+
+        foreach ($pattern in $FolderName) {
+
+            $namePatterns.Add([System.Management.Automation.WildcardPattern]::new($pattern, 'IgnoreCase'))
+
+        }
+
+        #A bare omit entry matches a folder name; one with a separator matches a path and everything below it
+        foreach ($entry in $OmitFolders) {
+
+            if ([string]::IsNullOrWhiteSpace($entry)) {
+
+                continue
+
+            }
+
+            if ($entry -notmatch '[\\/]') {
+
+                $omitNames.Add([System.Management.Automation.WildcardPattern]::new($entry, 'IgnoreCase'))
+                continue
+
+            }
+
+            $omitPath = ($entry -replace '[\\/]', $separator).TrimEnd($separator)
+
+            if ([System.IO.Path]::IsPathRooted($omitPath)) {
+
+                $omitRoots = @($omitPath)
+
+            } else {
+
+                $omitPath  = $omitPath -replace "^\.$([regex]::Escape($separator))"
+                $omitRoots = foreach ($base in (Convert-Path -LiteralPath $BasePath -ErrorAction SilentlyContinue)) {
+
+                    Join-Path -Path $base -ChildPath $omitPath
+
+                }
+            }
+
+            foreach ($omitRoot in $omitRoots) {
+
+                $omitPaths.Add([System.Management.Automation.WildcardPattern]::new($omitRoot, 'IgnoreCase'))
+                $omitPaths.Add([System.Management.Automation.WildcardPattern]::new("$omitRoot$separator*", 'IgnoreCase'))
+
+            }
+        }
+
+        $hasOmitNames = $omitNames.Count -gt 0
+        $hasOmitPaths = $omitPaths.Count -gt 0
+
+        #Used directly as a Where-Object filter so nothing but the pattern checks runs per folder
+        $folderFilter = {
+
+            $name     = $_.Name
+            $included = $matchAll
+
+            if (-not $included) {
+
+                foreach ($pattern in $namePatterns) {
+
+                    if ($pattern.IsMatch($name)) { $included = $true; break }
+
+                }
+            }
+
+            if ($included -and $hasOmitNames) {
+
+                foreach ($pattern in $omitNames) {
+
+                    if ($pattern.IsMatch($name)) { $included = $false; break }
+
+                }
+            }
+
+            if ($included -and $hasOmitPaths) {
+
+                $fullName = $_.FullName
+
+                foreach ($pattern in $omitPaths) {
+
+                    if ($pattern.IsMatch($fullName)) { $included = $false; break }
+
+                }
+            }
+
+            $included
+        }
     }
 
     process {
 
-        #All folders and look for files with a particular extension
-        if ($FolderName -eq 'all' -and $FindExtension) {
+        if ($FindExtension) {
 
-            $allFolders = Get-ChildItem -LiteralPath $BasePath -Force -Recurse | 
+            #Files share directories, so the decision is made once per directory and cached
+            $directoryIncluded = @{}
+
+            $allFolders = Get-ChildItem -LiteralPath $BasePath -Force -Recurse -File |
                 Where-Object {
 
-                    ($OmitFolders -notcontains $_.FullName) -and 
-                    ($FindExtension -contains $_.Extension)
-                    
-                }                
+                    if ($FindExtension -notcontains $_.Extension) { return $false }
 
-        #All folders
-        } elseif ($FolderName -eq 'all') {
+                    $directory = $_.DirectoryName
 
-            $allFolders = Get-ChildItem -LiteralPath $BasePath -Force | 
-                Where-Object {
+                    if ($directoryIncluded.ContainsKey($directory)) { return $directoryIncluded[$directory] }
 
-                    $OmitFolders -notcontains $_.FullName
+                    $segments = $directory.Split($separator)
+                    $included = $matchAll
 
+                    if (-not $included) {
+
+                        :nameSearch foreach ($segment in $segments) {
+
+                            foreach ($pattern in $namePatterns) {
+
+                                if ($pattern.IsMatch($segment)) { $included = $true; break nameSearch }
+
+                            }
+                        }
+                    }
+
+                    if ($included -and $hasOmitNames) {
+
+                        :omitSearch foreach ($segment in $segments) {
+
+                            foreach ($pattern in $omitNames) {
+
+                                if ($pattern.IsMatch($segment)) { $included = $false; break omitSearch }
+
+                            }
+                        }
+                    }
+
+                    if ($included -and $hasOmitPaths) {
+
+                        foreach ($pattern in $omitPaths) {
+
+                            if ($pattern.IsMatch($directory)) { $included = $false; break }
+
+                        }
+                    }
+
+                    $directoryIncluded[$directory] = $included
+                    $included
                 }
 
-        #Specified folder names and look for files with a particular extension
-        } elseif ($FolderName -ne 'all' -and $FindExtension) {
-
-            $allFolders = Get-ChildItem -LiteralPath $BasePath -Force -Recurse | 
-                Where-Object {
-
-                    ($_.FullName -match ".+$FolderName.+")   -and 
-                    ($OmitFolders -notcontains $_.FullName) -and 
-                    ($FindExtension -contains $_.Extension)
-
-                } 
-                
         } else {
 
-            $allFolders = Get-ChildItem -LiteralPath $BasePath -Force | 
-                Where-Object {
+            $children   = Get-ChildItem -LiteralPath $BasePath -Force -Directory
+            $allFolders = $children | Where-Object -FilterScript $folderFilter
 
-                    ($_.BaseName -match "$FolderName") -and 
-                    ($OmitFolders -notcontains $_.FullName)
+            #A folder with no subfolders is reported as itself, so a single folder can be sized
+            if (-not $children) {
 
-            }
-        }
-        
-        #Test for null, return just folder if no subfolders
-        $splitPath = Split-Path -Path $BasePath
-        if (!($allFolders) -and (Test-Path -Path $splitPath -ErrorAction SilentlyContinue)) {
-            
-            $findName   = Split-Path $BasePath -Leaf        
-            $allFolders = Get-ChildItem -LiteralPath $splitPath | 
-                Where-Object {
+                #Split-Path throws on a filesystem root in newer PowerShell versions (issue #29)
+                try {
 
-                    $_.Name -eq $findName
+                    $parentPath = Split-Path -Path $BasePath -ErrorAction Stop
+
+                } catch {
+
+                    $parentPath = $null
 
                 }
-                    
+
+                if ($parentPath -and (Test-Path -LiteralPath $parentPath)) {
+
+                    $leafNames  = Split-Path -Path $BasePath -Leaf
+                    $allFolders = Get-ChildItem -LiteralPath $parentPath -Force -Directory |
+                        Where-Object { $leafNames -contains $_.Name } |
+                        Where-Object -FilterScript $folderFilter
+
+                }
+            }
         }
     }
-    
+
     end {
 
         return $allFolders
 
-    }    
+    }
 }

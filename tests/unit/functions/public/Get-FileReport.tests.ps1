@@ -58,7 +58,7 @@ Describe 'Get-FileReport' {
 
     It 'Omits folders when specified' {
 
-        $folderToOmit = "$($resolvedPath)$($dirSeparator)folder1$($dirSeparator)file1.file"
+        $folderToOmit = "$($resolvedPath)$($dirSeparator)folder1"
         $results = Get-FileReport -BasePath $resolvedPath -FindExtension '.file' -OmitFolders $folderToOmit
 
         $results | Should -Not -BeNullOrEmpty
@@ -85,7 +85,7 @@ Describe 'Get-FileReport' {
         $results = Get-FileReport -BasePath $resolvedPath -FindExtension '.file' -FolderName 'folder1' -AddTotal
 
         $results | Should -Not -BeNullOrEmpty
-        $results.Count | Should -Be 1
+        @($results).Count | Should -Be 1
 
         $totalRow = $results | Where-Object { $_.FileName -match 'GrandTotal' }
         $totalRow | Should -BeNullOrEmpty

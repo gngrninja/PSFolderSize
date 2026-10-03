@@ -26,7 +26,9 @@ function Get-FolderSize {
 
     .PARAMETER OmitFolders
 
-    This parameter allows you to omit folder(s) (array of string) from being included
+    This parameter allows you to omit folder(s) (array of string) from being included.
+    Each entry can be a folder name ('node_modules'), a full path ('C:\Temp'), or a path relative to BasePath ('.\Temp').
+    Wildcards are supported ('*.git', 'C:\Temp\*'). A path also omits everything below it.
 
     .PARAMETER Output
 
@@ -141,8 +143,8 @@ function Get-FolderSize {
 
     .EXAMPLE
 
-    Omit folder(s) from being included 
-    Get-FolderSize.ps1 -OmitFolders 'C:\Temp','C:\Windows'
+    Omit folder(s) from being included, by name or by path
+    Get-FolderSize -OmitFolders 'C:\Temp','C:\Windows','node_modules'
 
     .EXAMPLE
 
@@ -181,12 +183,14 @@ function Get-FolderSize {
             
         )]
         [Alias('Name')]
+        [SupportsWildcards()]
         [String[]]
         $FolderName = 'all',
 
         [Parameter(
             ParameterSetName = 'default'
         )]
+        [SupportsWildcards()]
         [String[]]
         $OmitFolders,
 
@@ -290,6 +294,7 @@ function Get-FolderSize {
             $folderObject      = $null
             $folderSize        = $null
             $folderSizeInBytes = $null
+            $folderSizeInKB    = $null
             $folderSizeInMB    = $null
             $folderSizeInGB    = $null
             $folderBaseName    = $null
@@ -334,6 +339,13 @@ function Get-FolderSize {
                     $folderSizeInKB    = [math]::Round($folderSize.Sum / 1KB, 2)
                     $folderSizeInMB    = [math]::Round($folderSize.Sum / 1MB, 2)
                     $folderSizeInGB    = [math]::Round($folderSize.Sum / 1GB, 2)
+
+                } else {
+
+                    $folderSizeInBytes = 0
+                    $folderSizeInKB    = 0
+                    $folderSizeInMB    = 0
+                    $folderSizeInGB    = 0
 
                 }
             }

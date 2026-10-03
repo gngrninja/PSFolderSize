@@ -7,6 +7,31 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [1.8.0] 2026-10-02
+
+### Changed
+- `-FolderName` now uses PowerShell wildcard matching (`*`, `?`, `[...]`) instead of regular expressions.
+  Names match exactly by default, so `-FolderName Peter` no longer also returns `Peter123`; use `-FolderName 'Peter*'`
+  for the old substring behaviour. Note that `[` is a wildcard character, so a literal name such as `[Backup]` needs
+  `[WildcardPattern]::Escape()`. Multiple names are supported, and the legacy value `all` still means every folder.
+  Supersedes PR #32 (thanks @Yordanofff for the original fix).
+- `-OmitFolders` accepts folder names, full paths, or paths relative to `-BasePath`, with wildcard support.
+  A bare name (`node_modules`) omits any folder with that name; a path (`C:\Temp`, `.\Temp`, `C:\Temp\*`) omits that
+  folder and everything below it. Forward slashes and trailing separators are tolerated. Fixes #25.
+- A `-FolderName` or `-OmitFolders` filter that matches nothing now returns nothing. Previously the parent folder was
+  silently reported instead. Pointing `-BasePath` at a folder with no subfolders still reports that folder itself.
+- `Get-FolderSize` no longer lists top-level files as if they were folders.
+
+### Fixed
+- `-FolderName` values containing regex characters such as `Notepad++` no longer throw. Fixes #24.
+- `-FolderName` no longer matches as a substring. Fixes #26.
+- `Get-FolderSize` no longer fails when run from a filesystem root such as `/` on Linux and macOS. Fixes #29.
+- `-OmitFolders` now works with `Get-FileReport` (it previously only matched file paths by accident).
+- `Get-FileReport -AddTotal` labels the grand total with the base path instead of the last file's path.
+- Empty folders now report `0` for all sizes. Previously `SizeBytes`/`SizeMB`/`SizeGB` were blank and `SizeKB` repeated the
+  previous folder's value.
+- Unit tests pass on Windows PowerShell 5.1 as well as PowerShell 7.
+
 ## [1.7.3] 2026-02-07
 
 ### Fixed

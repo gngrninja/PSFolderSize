@@ -67,6 +67,32 @@ Describe 'Get-FolderSize' {
 
     }
 
+    It 'Reports zero for an empty folder instead of a stale or blank value' {
+
+        $root = Join-Path $TestDrive 'empty-case'
+        $null = New-Item -Path (Join-Path $root 'aaa_full/data.bin') -ItemType File -Value ('x' * 4096) -Force
+        $null = New-Item -Path (Join-Path $root 'zzz_empty')         -ItemType Directory -Force
+
+        $folderSize = Get-FolderSize -Path $root -AddFileTotals
+        $empty      = $folderSize | Where-Object { $_.FolderName -eq 'zzz_empty' }
+
+        $empty.SizeBytes | Should -Be 0
+        $empty.SizeKB    | Should -Be 0
+        $empty.SizeMB    | Should -Be 0
+        $empty.SizeGB    | Should -Be 0
+        $empty.FileCount | Should -Be 0
+
+    }
+
+    It 'Allows folder omission by name' {
+
+        $folderSize = Get-FolderSize -Path $resolvedPath -OmitFolders 'folder1'
+
+        $folderSize.FolderName | Should -Contain 'folder2'
+        $folderSize.FolderName | Should -Not -Contain 'folder1'
+
+    }
+
     It 'Filters by FolderName' {
 
         $folderSize = Get-FolderSize -Path $resolvedPath -FolderName 'folder1'

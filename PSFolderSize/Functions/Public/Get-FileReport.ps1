@@ -25,12 +25,14 @@ function Get-FileReport { #Begin function Get-FileReport
             ParameterSetName = 'default'
             
         )]
+        [SupportsWildcards()]
         [String[]]
         $FolderName = 'all',
 
         [Parameter(
             ParameterSetName = 'default'
         )]
+        [SupportsWildcards()]
         [String[]]
         $OmitFolders,
 
@@ -68,8 +70,6 @@ function Get-FileReport { #Begin function Get-FileReport
 
     #Get a list of all the directories in the base path we're looking for.
     $allFolders = Get-FolderList -FolderName $FolderName -FindExtension $FindExtension -OmitFolders $OmitFolders -BasePath $BasePath
-
-    $foundFiles = $null
 
     #Create list to store folder objects found with size info.
     [System.Collections.Generic.List[Object]]$fileList = @()
@@ -132,7 +132,7 @@ function Get-FileReport { #Begin function Get-FileReport
 
             $folderObject = [PSCustomObject]@{
 
-                FileName      = "GrandTotal for [$fullPath]"
+                FileName      = "GrandTotal for [$BasePath]"
                 SizeBytes     = $grandTotal
                 SizeMB        = $totalFolderSizeInMB
                 SizeGB        = $totalFolderSizeInGB
